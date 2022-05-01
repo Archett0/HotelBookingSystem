@@ -16,7 +16,7 @@ namespace HotelBookingSystem.Controllers
         }
 
         // Get: Customers
-        [Route("/customers")]
+        // [Route("/customers")]
         public IActionResult Index()
         {
             var customers = GetCustomers();
@@ -25,7 +25,7 @@ namespace HotelBookingSystem.Controllers
 
 
         // Get: Customer
-        [Route("/customer")]
+        // [Route("/customer")]
         public IActionResult Details(int id)
         {
             var customer = GetCustomers().SingleOrDefault(c => c.Id == id);

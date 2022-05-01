@@ -51,10 +51,10 @@ namespace HotelBookingSystem
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
-                endpoints.MapControllerRoute(
-                    name: "customers",
-                    pattern: "customers");
-
+                // endpoints.MapControllerRoute(
+                //     name: "customers",
+                //     pattern: "customers");
+                //
                 // endpoints.MapControllerRoute(
                 //     name:"MoviesByReleaseDate",
                 //     pattern:"movies/released/{year}/{month}",
