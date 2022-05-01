@@ -4,9 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using HotelBookingSystem.Data;
 using HotelBookingSystem.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace HotelBookingSystem.Controllers
 {
@@ -17,22 +17,23 @@ namespace HotelBookingSystem.Controllers
         public CustomersController(HotelBookingSystemContext context)
         {
             _context = context;
+            // _context.Dispose();  // 要加这句话吗？加上会报错
         }
 
         // Get: Customers
-        // [Route("/customers")]
         public async Task<IActionResult> Index()
         {
-            var customers = GetCustomers();
+            // var customers = GetCustomers();
+            var customers = _context.Customer.Include(c => c.MembershipType).ToList();  // 若不加ToList则在执行遍历时才去查询DB,加入Include是执行贪婪加载
             return View(customers);
             // return View(await _context.Customer.ToListAsync());
         }
 
         // Get: Customer
-        // [Route("/customer")]
         public IActionResult Details(int id)
         {
-            var customer = GetCustomers().SingleOrDefault(c => c.Id == id);
+            // var customer = GetCustomers().SingleOrDefault(c => c.Id == id);
+            var customer = _context.Customer.SingleOrDefault(c => c.Id == id);
             if (customer == null)
             {
                 return NotFound();
@@ -40,14 +41,14 @@ namespace HotelBookingSystem.Controllers
             return View(customer);
         }
 
-        public IEnumerable<Customer> GetCustomers()
-        {
-            return new List<Customer>
-            {
-                new Customer { Id = 1, Name = "成龙" },
-                new Customer { Id = 2, Name = "李小年" }
-            };
-        }
+        // public IEnumerable<Customer> GetCustomers() // 使用_context.Customer后本方法被废弃
+        // {
+        //     return new List<Customer>
+        //     {
+        //         new Customer { Id = 1, Name = "成龙" },
+        //         new Customer { Id = 2, Name = "李小年" }
+        //     };
+        // }
 
 
         // // GET: Customers/Details/5

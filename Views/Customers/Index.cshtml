@@ -14,7 +14,8 @@ else
 	<table class="table table-bordered table-hover">
 		<thead>
 			<tr>
-				<th>Customer</th>
+				<th>顾客姓名</th>
+				<th>享受的折扣百分比</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -22,6 +23,7 @@ else
 			{
 				<tr>
 					<td>@Html.ActionLink(customer.Name, "Details", "Customers", new { id = customer.Id }, null)</td>
+					<td>@customer.MembershipType.DiscountRate%</td>
 				</tr>
 			}
 		</tbody>
