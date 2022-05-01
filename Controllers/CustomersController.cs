@@ -3,24 +3,29 @@ using System.Linq;
 using HotelBookingSystem.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System;
 
 namespace HotelBookingSystem.Controllers
 {
-    public class CustomerController : Controller
+    public class CustomersController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-
-        public CustomerController(ILogger<HomeController> logger)
+        public CustomersController(ILogger<HomeController> logger)
         {
             _logger = logger;
         }
 
+        // Get: Customers
+        [Route("/customers")]
         public IActionResult Index()
         {
             var customers = GetCustomers();
             return View(customers);
         }
 
+
+        // Get: Customer
+        [Route("/customer")]
         public IActionResult Details(int id)
         {
             var customer = GetCustomers().SingleOrDefault(c => c.Id == id);
@@ -35,8 +40,8 @@ namespace HotelBookingSystem.Controllers
         {
             return new List<Customer>
             {
-                new Customer { Id = 1, Name = "顾客1" },
-                new Customer { Id = 2, Name = "顾客2" }
+                new Customer { Id = 1, Name = "成龙" },
+                new Customer { Id = 2, Name = "李小年" }
             };
         }
     }

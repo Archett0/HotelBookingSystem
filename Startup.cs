@@ -51,13 +51,16 @@ namespace HotelBookingSystem
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
-
                 endpoints.MapControllerRoute(
-                    name:"MoviesByReleaseDate",
-                    pattern:"movies/released/{year}/{month}",
-                    defaults: new { controller = "Movies", action = "ByReleaseDate" },
-                    constraints: new { year = @"2015|2016", month = @"\d{2}"}); // not tested
-                    // constraints: new { year = @"\d{4}", month = @"\d{2}"}); // works
+                    name: "customers",
+                    pattern: "customers");
+
+                // endpoints.MapControllerRoute(
+                //     name:"MoviesByReleaseDate",
+                //     pattern:"movies/released/{year}/{month}",
+                //     defaults: new { controller = "Movies", action = "ByReleaseDate" },
+                //     constraints: new { year = @"2015|2016", month = @"\d{2}"}); // not tested
+                //     // constraints: new { year = @"\d{4}", month = @"\d{2}"}); // works
             });
         }
     }

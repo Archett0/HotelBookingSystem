@@ -1,0 +1,29 @@
+﻿@model IEnumerable<Customer>
+@{
+	ViewBag.Title = "Customers";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<br/>
+<h2>顾客列表</h2>
+@if (!Model.Any())
+{
+	<p>暂无顾客</p>
+}
+else
+{
+	<table class="table table-bordered table-hover">
+		<thead>
+			<tr>
+				<th>Customer</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var customer in Model)
+			{
+				<tr>
+					<td>@Html.ActionLink(customer.Name, "Details", "Customers", new { id = customer.Id }, null)</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+}

@@ -10,22 +10,26 @@ namespace HotelBookingSystem.Controllers
 {
     public class MoviesController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-
-        public MoviesController(ILogger<HomeController> logger)
-        {
-            _logger = logger;
-        }
+        // private readonly ILogger<HomeController> _logger;
+        // public MoviesController(ILogger<HomeController> logger)
+        // {
+        //     _logger = logger;
+        // }
 
         // Get: Movies
-        public IActionResult Index(int? pageIndex, string sortBy)
+        public IActionResult Index()
         {
-            if (!pageIndex.HasValue)
-                pageIndex = 1;
-            if (string.IsNullOrWhiteSpace(sortBy))
-                sortBy = "Name";
+            var movies = GetMovies();
+            return View(movies);
+        }
 
-            return Content(String.Format("pageIndex={0}&sortBy={1}", pageIndex, sortBy));
+        private IEnumerable<Movie> GetMovies()
+        {
+            return new List<Movie>
+            {
+                new Movie { Id = 1, Name = "Interstellar" },
+                new Movie { Id = 2, Name = "Inception" }
+            };
         }
 
 
@@ -45,22 +49,7 @@ namespace HotelBookingSystem.Controllers
                 Customers = customers
             };
 
-            return View(viewModel); 
-
-            // return Content("Hello World!");
-            // return RedirectToAction("Index", "Home", new {page = 1, sortBy = "name"});
-        }
-
-        public IActionResult Edit(int id)
-        {
-            return Content("id=" + id);
-        }
-
-        
-        // [Route("movies/released/{year}/{month:range(1,12)}")] // working and this is the priority
-        public IActionResult ByReleaseDate(int year, int month)
-        {
-            return Content(year + "/" + month);
+            return View(viewModel);
         }
     }
 }
