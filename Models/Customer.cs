@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace HotelBookingSystem.Models
 {
@@ -11,5 +12,6 @@ namespace HotelBookingSystem.Models
         public bool IsSubscribedToNewsLetter { get; set; }  // 是否订阅推销邮件
         public MembershipType MembershipType { get; set; }  // 保存这个用户的会员类型,有时候不需要
         public byte MembershipTypeId { get; set; }  //FK
+        public DateTime? Birthday { get; set; } // 顾客的生日,可以不填
     }
 }

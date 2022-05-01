@@ -3,5 +3,12 @@
 	ViewBag.Title = Model.Name;
 	Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
+<br/>
 <h1>@Model.Name</h1>
+<ul>
+	<li>会员类别：@Model.MembershipType.Name</li>
+	@if (Model.Birthday.HasValue)
+	{
+		<li>用户生日：@Model.Birthday.Value.ToShortDateString()</li>
+	}
+</ul>
