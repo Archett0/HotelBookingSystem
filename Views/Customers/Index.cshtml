@@ -15,6 +15,7 @@ else
 		<thead>
 			<tr>
 				<th>顾客姓名</th>
+				<th>会员类别名称</th>
 				<th>享受的折扣百分比</th>
 			</tr>
 		</thead>
@@ -23,6 +24,7 @@ else
 			{
 				<tr>
 					<td>@Html.ActionLink(customer.Name, "Details", "Customers", new { id = customer.Id }, null)</td>
+					<td>@customer.MembershipType.Name</td>
 					<td>@customer.MembershipType.DiscountRate%</td>
 				</tr>
 			}
