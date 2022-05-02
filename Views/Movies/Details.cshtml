@@ -1,0 +1,28 @@
+﻿@model Movie
+@{
+	ViewBag.Title = Model.Name;
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<br/>
+<h2>@Model.Name</h2>
+<ul>
+	<li>
+		房间Id：@Model.Id
+	</li>
+	<li>
+		房间类型：@Model.RoomType.Name
+	</li>
+	<li>
+		房间类型Id：@Model.RoomType.Id
+	</li>
+	<li>
+		房间入住日期：@Model.DateCheckIn.ToLongDateString()
+	</li>
+	<li>
+		房间退房日期：@Model.DateCheckOut.ToLongDateString()
+	</li>
+	<li>
+		房间库存：@Model.NumberInStock
+	</li>
+</ul>
+

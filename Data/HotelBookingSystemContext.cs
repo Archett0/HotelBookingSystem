@@ -9,7 +9,7 @@ namespace HotelBookingSystem.Data
 {
     public class HotelBookingSystemContext : DbContext
     {
-        public HotelBookingSystemContext (DbContextOptions<HotelBookingSystemContext> options)
+        public HotelBookingSystemContext(DbContextOptions<HotelBookingSystemContext> options)
             : base(options)
         {
         }
@@ -17,5 +17,7 @@ namespace HotelBookingSystem.Data
         public DbSet<HotelBookingSystem.Models.Movie> Movie { get; set; }
 
         public DbSet<HotelBookingSystem.Models.Customer> Customer { get; set; }
+
+        public DbSet<HotelBookingSystem.Models.Room> Room { get; set; }
     }
 }

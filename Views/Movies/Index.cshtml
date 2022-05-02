@@ -8,14 +8,16 @@
 <table class="table table-bordered table-hover">
 	<thead>
 	<tr>
-		<th>Movie</th>
+		<th>电影</th>
+		<th>类别</th>
 	</tr>
 	</thead>
 	<tbody>
 	@foreach (var movie in Model)
 	{
 		<tr>
-			<td>@movie.Name</td>
+			<td>@Html.ActionLink(movie.Name, "Details", "Movies", new { id = movie.Id }, null)</td>
+			<td>@movie.RoomType.Name</td>
 		</tr>
 	}
 	</tbody>

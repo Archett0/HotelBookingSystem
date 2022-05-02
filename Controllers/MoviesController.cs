@@ -23,57 +23,26 @@ namespace HotelBookingSystem.Controllers
         // GET: Movies
         public async Task<IActionResult> Index()
         {
-            // return View(await _context.Movie.ToListAsync());
-            var movies = GetMovies();
+            var movies = _context.Movie.Include(m => m.RoomType).ToList();
             return View(movies);
         }
 
-        private IEnumerable<Movie> GetMovies()
+        // GET: Movies/Details/5
+        public async Task<IActionResult> Details(int? id)
         {
-            return new List<Movie>
+            if (id == null)
             {
-                new Movie { Id = 1, Name = "Interstellar" },
-                new Movie { Id = 2, Name = "Inception" }
-            };
+                return NotFound();
+            }
+            var movie = _context.Movie.Include(m => m.RoomType).SingleOrDefault(m => m.Id == id);
+            if (movie == null)
+            {
+                return NotFound();
+            }
+        
+            return View(movie);
         }
 
-        //Get: Movies/Random
-        public IActionResult Random()
-        {
-            var movie = new Movie() { Name = "Shrek!" };
-            var customers = new List<Customer>
-            {
-                new Customer { Name = "Customer 1" },
-                new Customer { Name = "Customer 2" }
-            };
-
-            var viewModel = new RandomMovieViewModel
-            {
-                Movie = movie,
-                Customers = customers
-            };
-
-            return View(viewModel);
-        }
-
-
-        // // GET: Movies/Details/5
-        // public async Task<IActionResult> Details(int? id)
-        // {
-        //     if (id == null)
-        //     {
-        //         return NotFound();
-        //     }
-        //
-        //     var movie = await _context.Movie
-        //         .FirstOrDefaultAsync(m => m.Id == id);
-        //     if (movie == null)
-        //     {
-        //         return NotFound();
-        //     }
-        //
-        //     return View(movie);
-        // }
         //
         // // GET: Movies/Create
         // public IActionResult Create()
