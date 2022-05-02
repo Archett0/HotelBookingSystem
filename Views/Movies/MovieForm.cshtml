@@ -1,0 +1,35 @@
+﻿@model HotelBookingSystem.ViewModels.MovieFormViewModel
+@{
+	ViewData["Title"] = "MovieForm";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@Model.Title</h2>
+
+@using (Html.BeginForm("Save", "Movies"))
+{
+	<div class="form-group">
+		@Html.LabelFor(m => m.Movie.Name, new { @class = "form-label mt-4"})
+		@Html.TextBoxFor(m => m.Movie.Name, new { @class = "form-control"})
+	</div>
+	<div class="form-group">
+		@Html.LabelFor(m => m.Movie.DateCheckIn, new { @class = "form-label mt-4"})
+		@Html.TextBoxFor(m => m.Movie.DateCheckIn, "{0:d MMM yyyy}", new { @class = "form-control"})
+	</div>
+	<div class="form-group">
+		@Html.LabelFor(m => m.Movie.DateCheckOut, new { @class = "form-label mt-4"})
+		@Html.TextBoxFor(m => m.Movie.DateCheckOut, "{0:d MMM yyyy}", new { @class = "form-control"})
+	</div>
+	<div class="form-group">
+		@Html.LabelFor(m => m.Movie.RoomTypeId,new { @class = "form-label mt-4"})
+		@Html.DropDownListFor(m => m.Movie.RoomTypeId, new SelectList(Model.RoomTypes,"Id", "Name"), "选择房间类型" , new { @class = "form-control"})
+	</div>
+	<div class="form-group">
+		@Html.LabelFor(m => m.Movie.NumberInStock, new { @class = "form-label mt-4"})
+		@Html.TextBoxFor(m => m.Movie.NumberInStock, new { @class = "form-control"})
+	</div>
+	@Html.HiddenFor(m => m.Movie.Id);
+	<button type="submit" class="btn btn-primary mt-4">保存</button>
+}
+
+

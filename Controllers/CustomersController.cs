@@ -22,7 +22,7 @@ namespace HotelBookingSystem.Controllers
         }
 
         // Get: Customers
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index()    // 列表页
         {
             // var customers = GetCustomers();
             var customers = _context.Customer.Include(c => c.MembershipType).ToList();  // 若不加ToList则在执行遍历时才去查询DB,加入Include是执行贪婪加载
@@ -31,7 +31,7 @@ namespace HotelBookingSystem.Controllers
         }
 
         // Get: Customer
-        public IActionResult Details(int id)
+        public IActionResult Details(int id)    // 详情页
         {
             // var customer = GetCustomers().SingleOrDefault(c => c.Id == id);
             var customer = _context.Customer.Include(c => c.MembershipType).SingleOrDefault(c => c.Id == id);
@@ -43,7 +43,7 @@ namespace HotelBookingSystem.Controllers
         }
 
         // GET: Customers/New
-        public IActionResult New()  // 新建顾客的页面
+        public IActionResult New()  // 新建页，用来给表单提供数据
         {
             var membershipTypes = _context.MembershipType.ToList();
             var viewModel = new CustomerFormViewModel
@@ -53,8 +53,9 @@ namespace HotelBookingSystem.Controllers
             return View("CustomerForm", viewModel);
         }
 
+        // GET: Customers/Save
         [HttpPost]
-        public IActionResult Save(Customer customer) // Model binding
+        public IActionResult Save(Customer customer) // 写入DB,使用Model binding
         {
             if (customer.Id == 0)   // 新顾客
             {
@@ -72,10 +73,10 @@ namespace HotelBookingSystem.Controllers
 
             _context.SaveChanges(); // 根据所有数据的变化进行更改(在Transaction中进行)
 
-            return RedirectToAction("Index","Customers");
+            return RedirectToAction("Index","Customers");   // 返回给本Controller的IndexAction
         }
 
-        public IActionResult Edit(int id)
+        public IActionResult Edit(int id)   // 修改页,给修改页提供数据
         {
             var customer = _context.Customer.SingleOrDefault(c => c.Id == id);
             if (customer == null)
@@ -90,39 +91,6 @@ namespace HotelBookingSystem.Controllers
         }
 
 
-        //
-        // // POST: Customers/Create
-        // // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        // [HttpPost]
-        // [ValidateAntiForgeryToken]
-        // public async Task<IActionResult> Create([Bind("Id,Name")] Customer customer)
-        // {
-        //     if (ModelState.IsValid)
-        //     {
-        //         _context.Add(customer);
-        //         await _context.SaveChangesAsync();
-        //         return RedirectToAction(nameof(Index));
-        //     }
-        //     return View(customer);
-        // }
-        //
-        // // GET: Customers/Edit/5
-        // public async Task<IActionResult> Edit(int? id)
-        // {
-        //     if (id == null)
-        //     {
-        //         return NotFound();
-        //     }
-        //
-        //     var customer = await _context.Customer.FindAsync(id);
-        //     if (customer == null)
-        //     {
-        //         return NotFound();
-        //     }
-        //     return View(customer);
-        // }
-        //
         // // POST: Customers/Edit/5
         // // To protect from overposting attacks, enable the specific properties you want to bind to.
         // // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.

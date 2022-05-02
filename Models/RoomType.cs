@@ -4,7 +4,7 @@ namespace HotelBookingSystem.Models
 {
     public class RoomType
     {
-        public int Id { get; set; } // PK
+        public byte Id { get; set; } // PK
         
         [Required]
         [StringLength(255)]

@@ -4,14 +4,16 @@ using HotelBookingSystem.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace HotelBookingSystem.Migrations
 {
     [DbContext(typeof(HotelBookingSystemContext))]
-    partial class HotelBookingSystemContextModelSnapshot : ModelSnapshot
+    [Migration("20220502131836_FKCorrectionSecondStep")]
+    partial class FKCorrectionSecondStep
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -93,9 +95,12 @@ namespace HotelBookingSystem.Migrations
                     b.Property<byte>("RoomTypeId")
                         .HasColumnType("tinyint");
 
+                    b.Property<int?>("RoomTypeId1")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("RoomTypeId");
+                    b.HasIndex("RoomTypeId1");
 
                     b.ToTable("Movie");
                 });
@@ -121,17 +126,22 @@ namespace HotelBookingSystem.Migrations
                     b.Property<byte>("RoomTypeId")
                         .HasColumnType("tinyint");
 
+                    b.Property<int?>("RoomTypeId1")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("RoomTypeId");
+                    b.HasIndex("RoomTypeId1");
 
                     b.ToTable("Room");
                 });
 
             modelBuilder.Entity("HotelBookingSystem.Models.RoomType", b =>
                 {
-                    b.Property<byte>("Id")
-                        .HasColumnType("tinyint");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -158,9 +168,7 @@ namespace HotelBookingSystem.Migrations
                 {
                     b.HasOne("HotelBookingSystem.Models.RoomType", "RoomType")
                         .WithMany()
-                        .HasForeignKey("RoomTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("RoomTypeId1");
 
                     b.Navigation("RoomType");
                 });
@@ -169,9 +177,7 @@ namespace HotelBookingSystem.Migrations
                 {
                     b.HasOne("HotelBookingSystem.Models.RoomType", "RoomType")
                         .WithMany()
-                        .HasForeignKey("RoomTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("RoomTypeId1");
 
                     b.Navigation("RoomType");
                 });

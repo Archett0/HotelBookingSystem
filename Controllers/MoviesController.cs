@@ -21,14 +21,14 @@ namespace HotelBookingSystem.Controllers
         }
 
         // GET: Movies
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index()    // 列表页
         {
             var movies = _context.Movie.Include(m => m.RoomType).ToList();
             return View(movies);
         }
 
         // GET: Movies/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int? id)   // 详情页
         {
             if (id == null)
             {
@@ -43,45 +43,58 @@ namespace HotelBookingSystem.Controllers
             return View(movie);
         }
 
-        //
-        // // GET: Movies/Create
-        // public IActionResult Create()
-        // {
-        //     return View();
-        // }
-        //
-        // // POST: Movies/Create
-        // // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        // [HttpPost]
-        // [ValidateAntiForgeryToken]
-        // public async Task<IActionResult> Create([Bind("Id,Name")] Movie movie)
-        // {
-        //     if (ModelState.IsValid)
-        //     {
-        //         _context.Add(movie);
-        //         await _context.SaveChangesAsync();
-        //         return RedirectToAction(nameof(Index));
-        //     }
-        //     return View(movie);
-        // }
-        //
-        // // GET: Movies/Edit/5
-        // public async Task<IActionResult> Edit(int? id)
-        // {
-        //     if (id == null)
-        //     {
-        //         return NotFound();
-        //     }
-        //
-        //     var movie = await _context.Movie.FindAsync(id);
-        //     if (movie == null)
-        //     {
-        //         return NotFound();
-        //     }
-        //     return View(movie);
-        // }
-        //
+        // GET: Movies/New
+        public IActionResult New()  // 新建页
+        {
+            var roomTypes = _context.RoomType.ToList();
+            var viewModel = new MovieFormViewModel
+            {
+                RoomTypes = roomTypes
+            };
+            return View("MovieForm", viewModel);
+        }
+
+        // GET: Movies/Save
+        [HttpPost]
+        public IActionResult Save(Movie movie)  // 写入DB
+        {
+            if (movie.Id == 0)
+            {
+                _context.Movie.Add(movie);
+            }
+            else
+            {
+                var movieInDb = _context.Movie.Single(m => m.Id == movie.Id);
+                movieInDb.Name = movie.Name;
+                movieInDb.DateCheckIn = movie.DateCheckIn;
+                movieInDb.DateCheckOut = movie.DateCheckOut;
+                movieInDb.RoomTypeId = movie.RoomTypeId;
+                movieInDb.NumberInStock = movie.NumberInStock;
+            }
+
+            _context.SaveChanges();
+
+            return RedirectToAction("Index","Movies");
+        }
+
+        // GET: Movies/Edit
+        public IActionResult Edit(int id)
+        {
+            var movie = _context.Movie.SingleOrDefault(m => m.Id == id);
+            if (movie == null)
+                return NotFound();
+
+            var viewModel = new MovieFormViewModel
+            {
+                Movie = movie,
+                RoomTypes = _context.RoomType.ToList()
+            };
+
+            return View("MovieForm", viewModel);
+        }
+
+
+
         // // POST: Movies/Edit/5
         // // To protect from overposting attacks, enable the specific properties you want to bind to.
         // // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.

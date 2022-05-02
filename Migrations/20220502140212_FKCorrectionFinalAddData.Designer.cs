@@ -4,14 +4,16 @@ using HotelBookingSystem.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace HotelBookingSystem.Migrations
 {
     [DbContext(typeof(HotelBookingSystemContext))]
-    partial class HotelBookingSystemContextModelSnapshot : ModelSnapshot
+    [Migration("20220502140212_FKCorrectionFinalAddData")]
+    partial class FKCorrectionFinalAddData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
