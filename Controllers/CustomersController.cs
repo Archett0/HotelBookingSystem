@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using HotelBookingSystem.Data;
 using HotelBookingSystem.Models;
+using HotelBookingSystem.ViewModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace HotelBookingSystem.Controllers
@@ -41,39 +42,54 @@ namespace HotelBookingSystem.Controllers
             return View(customer);
         }
 
-        // public IEnumerable<Customer> GetCustomers() // 使用_context.Customer后本方法被废弃
-        // {
-        //     return new List<Customer>
-        //     {
-        //         new Customer { Id = 1, Name = "成龙" },
-        //         new Customer { Id = 2, Name = "李小年" }
-        //     };
-        // }
+        // GET: Customers/New
+        public IActionResult New()  // 新建顾客的页面
+        {
+            var membershipTypes = _context.MembershipType.ToList();
+            var viewModel = new CustomerFormViewModel
+            {
+                MembershipTypes = membershipTypes
+            };
+            return View("CustomerForm", viewModel);
+        }
+
+        [HttpPost]
+        public IActionResult Save(Customer customer) // Model binding
+        {
+            if (customer.Id == 0)   // 新顾客
+            {
+                _context.Customer.Add(customer);
+            }
+            else
+            {
+                var customerInDb = _context.Customer.Single(c => c.Id == customer.Id);  // 拿出数据库中的顾客信息
+                // TryUpdateModelAsync(customerInDb); // Data Breach DO NOT USE
+                customerInDb.Name = customer.Name;  // 手动设置props
+                customerInDb.Birthday = customer.Birthday;
+                customerInDb.MembershipTypeId = customer.MembershipTypeId;
+                customerInDb.IsSubscribedToNewsLetter = customer.IsSubscribedToNewsLetter;
+            }
+
+            _context.SaveChanges(); // 根据所有数据的变化进行更改(在Transaction中进行)
+
+            return RedirectToAction("Index","Customers");
+        }
+
+        public IActionResult Edit(int id)
+        {
+            var customer = _context.Customer.SingleOrDefault(c => c.Id == id);
+            if (customer == null)
+                return NotFound();
+
+            var viewModel = new CustomerFormViewModel
+            {
+                Customer = customer,
+                MembershipTypes = _context.MembershipType.ToList()
+            };
+            return View("CustomerForm", viewModel);
+        }
 
 
-        // // GET: Customers/Details/5
-        // public async Task<IActionResult> Details(int? id)
-        // {
-        //     if (id == null)
-        //     {
-        //         return NotFound();
-        //     }
-        //
-        //     var customer = await _context.Customer
-        //         .FirstOrDefaultAsync(m => m.Id == id);
-        //     if (customer == null)
-        //     {
-        //         return NotFound();
-        //     }
-        //
-        //     return View(customer);
-        // }
-        //
-        // // GET: Customers/Create
-        // public IActionResult Create()
-        // {
-        //     return View();
-        // }
         //
         // // POST: Customers/Create
         // // To protect from overposting attacks, enable the specific properties you want to bind to.

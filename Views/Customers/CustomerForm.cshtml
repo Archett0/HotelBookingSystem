@@ -1,0 +1,31 @@
+﻿@model HotelBookingSystem.ViewModels.CustomerFormViewModel
+@{
+	ViewData["Title"] = "CustomerForm";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>New Customer</h2>
+
+@using (Html.BeginForm("Save", "Customers"))
+{
+	<div class="form-group">
+		@Html.LabelFor(m => m.Customer.Name, new { @class = "form-label mt-4"})
+		@Html.TextBoxFor(m => m.Customer.Name, new { @class = "form-control"})
+	</div>
+	<div class="form-group">
+		@Html.LabelFor(m => m.Customer.Birthday, new { @class = "form-label mt-4"})
+		@Html.TextBoxFor(m => m.Customer.Birthday, "{0:d MMM yyyy}", new { @class = "form-control"})
+	</div>
+	<div class="form-group">
+		@Html.LabelFor(m => m.Customer.MembershipTypeId,new { @class = "form-label mt-4"})
+		@Html.DropDownListFor(m => m.Customer.MembershipTypeId, new SelectList(Model.MembershipTypes,"Id", "Name"), "选择会员类别" , new { @class = "form-control"})
+	</div>
+	<div class="form-check mt-4">
+		@Html.CheckBoxFor(m => m.Customer.IsSubscribedToNewsLetter,new { @class = "form-check-input"})
+		<label class="form-check-label">
+			订阅推销邮件?
+		</label>
+	</div>
+	@Html.HiddenFor(m => m.Customer.Id);
+	<button type="submit" class="btn btn-primary mt-4">保存</button>
+}
