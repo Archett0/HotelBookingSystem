@@ -29,6 +29,7 @@ namespace HotelBookingSystem
 
             services.AddDbContext<HotelBookingSystemContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("HotelBookingSystemContext")));
+            services.AddRazorPages();   // Added while deploying Identity Authentication
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -49,6 +50,7 @@ namespace HotelBookingSystem
 
             app.UseRouting();
 
+            app.UseAuthentication();    // Added while deploying Identity Authentication
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
@@ -56,6 +58,7 @@ namespace HotelBookingSystem
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapRazorPages();
                 // endpoints.MapControllerRoute(
                 //     name: "customers",
                 //     pattern: "customers");
