@@ -21,14 +21,14 @@ namespace HotelBookingSystem.Controllers
         }
 
         // GET: Movies
-        public async Task<IActionResult> Index()    // 列表页
+        public IActionResult Index()    // 列表页
         {
             var movies = _context.Movie.Include(m => m.RoomType).ToList();
             return View(movies);
         }
 
         // GET: Movies/Details/5
-        public async Task<IActionResult> Details(int? id)   // 详情页
+        public IActionResult Details(int? id)   // 详情页
         {
             if (id == null)
             {
@@ -49,6 +49,7 @@ namespace HotelBookingSystem.Controllers
             var roomTypes = _context.RoomType.ToList();
             var viewModel = new MovieFormViewModel
             {
+                Movie = new Movie(),
                 RoomTypes = roomTypes
             };
             return View("MovieForm", viewModel);
@@ -56,8 +57,19 @@ namespace HotelBookingSystem.Controllers
 
         // GET: Movies/Save
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Save(Movie movie)  // 写入DB
         {
+            if (!ModelState.IsValid)
+            {
+                var viewModel = new MovieFormViewModel
+                {
+                    Movie = movie,
+                    RoomTypes = _context.RoomType.ToList()
+                };
+
+                return View("MovieForm", viewModel);
+            }
             if (movie.Id == 0)
             {
                 _context.Movie.Add(movie);

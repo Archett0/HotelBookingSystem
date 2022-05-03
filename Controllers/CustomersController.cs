@@ -22,18 +22,15 @@ namespace HotelBookingSystem.Controllers
         }
 
         // Get: Customers
-        public async Task<IActionResult> Index()    // 列表页
+        public  IActionResult Index()    // 列表页
         {
-            // var customers = GetCustomers();
             var customers = _context.Customer.Include(c => c.MembershipType).ToList();  // 若不加ToList则在执行遍历时才去查询DB,加入Include是执行贪婪加载
             return View(customers);
-            // return View(await _context.Customer.ToListAsync());
         }
 
         // Get: Customer
         public IActionResult Details(int id)    // 详情页
         {
-            // var customer = GetCustomers().SingleOrDefault(c => c.Id == id);
             var customer = _context.Customer.Include(c => c.MembershipType).SingleOrDefault(c => c.Id == id);
             if (customer == null)
             {
@@ -48,6 +45,7 @@ namespace HotelBookingSystem.Controllers
             var membershipTypes = _context.MembershipType.ToList();
             var viewModel = new CustomerFormViewModel
             {
+                Customer = new Customer(),
                 MembershipTypes = membershipTypes
             };
             return View("CustomerForm", viewModel);
@@ -55,8 +53,20 @@ namespace HotelBookingSystem.Controllers
 
         // GET: Customers/Save
         [HttpPost]
+        [ValidateAntiForgeryToken]  // Anti-CSRF
         public IActionResult Save(Customer customer) // 写入DB,使用Model binding
         {
+            if (!ModelState.IsValid)    // 验证第二步
+            {
+                var viewModel = new CustomerFormViewModel
+                {
+                    Customer = customer,
+                    MembershipTypes = _context.MembershipType.ToList()
+                };
+
+                return View("CustomerForm", viewModel); // 返回相同的View
+            }
+
             if (customer.Id == 0)   // 新顾客
             {
                 _context.Customer.Add(customer);

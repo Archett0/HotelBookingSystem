@@ -7,5 +7,8 @@
         public byte DurationInMonths { get; set; }  // 会员有效期0-36
         public byte DiscountRate { get; set; }  // 折扣百分比0-100
         public string Name { get; set; }
+
+        public static readonly byte Unknown = 0;    // 用户没有选择会员类型,和下面的属性一样被用于表单验证
+        public static readonly byte SilverMember = 1; // 不可以成为付费会员
     }
 }

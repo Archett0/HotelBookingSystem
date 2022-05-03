@@ -7,8 +7,8 @@ namespace HotelBookingSystem.Models
     {
         public int Id { get; set; }
 
-        [Required]  // Data Annotations
-        [StringLength(255)]
+        [Required(ErrorMessage = "请输入顾客姓名")]  // Data Annotations
+        [StringLength(255)] // 验证第一步
         [Display(Name = "姓名")]
         public string Name { get; set; }
 
@@ -21,6 +21,7 @@ namespace HotelBookingSystem.Models
         public byte MembershipTypeId { get; set; }  //FK
         
         [Display(Name = "生日")]
+        [Min18YearsIfAMember]   // 自定义验证第二步
         public DateTime? Birthday { get; set; } // 顾客的生日,可以不填
     }
 }

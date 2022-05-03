@@ -8,17 +8,21 @@
 
 @using (Html.BeginForm("Save", "Customers"))
 {
+	@Html.ValidationSummary()
 	<div class="form-group">
 		@Html.LabelFor(m => m.Customer.Name, new { @class = "form-label mt-4"})
 		@Html.TextBoxFor(m => m.Customer.Name, new { @class = "form-control"})
-	</div>
-	<div class="form-group">
-		@Html.LabelFor(m => m.Customer.Birthday, new { @class = "form-label mt-4"})
-		@Html.TextBoxFor(m => m.Customer.Birthday, "{0:d MMM yyyy}", new { @class = "form-control"})
+		@Html.ValidationMessageFor(m => m.Customer.Name)
 	</div>
 	<div class="form-group">
 		@Html.LabelFor(m => m.Customer.MembershipTypeId,new { @class = "form-label mt-4"})
 		@Html.DropDownListFor(m => m.Customer.MembershipTypeId, new SelectList(Model.MembershipTypes,"Id", "Name"), "选择会员类别" , new { @class = "form-control"})
+		@Html.ValidationMessageFor(m => m.Customer.MembershipTypeId)
+	</div>
+	<div class="form-group">
+		@Html.LabelFor(m => m.Customer.Birthday, new { @class = "form-label mt-4"})
+		@Html.TextBoxFor(m => m.Customer.Birthday, "{0:d MMM yyyy}", new { @class = "form-control"})
+		@Html.ValidationMessageFor(m => m.Customer.Birthday)
 	</div>
 	<div class="form-check mt-4">
 		@Html.CheckBoxFor(m => m.Customer.IsSubscribedToNewsLetter,new { @class = "form-check-input"})
@@ -26,6 +30,11 @@
 			订阅推销邮件?
 		</label>
 	</div>
-	@Html.HiddenFor(m => m.Customer.Id);
+	@Html.HiddenFor(m => m.Customer.Id)
+	@Html.AntiForgeryToken()	// Anti-CSRF(Cross-site request forgery)
 	<button type="submit" class="btn btn-primary mt-4">保存</button>
+}
+
+@section Scripts {
+	@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}	@*添加客户端验证*@
 }
