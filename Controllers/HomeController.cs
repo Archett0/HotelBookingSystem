@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace HotelBookingSystem.Controllers
 {
-    [Authorize]
+    [Authorize] // 启用身份控制
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;

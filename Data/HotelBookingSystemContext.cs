@@ -22,5 +22,6 @@ namespace HotelBookingSystem.Data
 
         public DbSet<HotelBookingSystem.Models.MembershipType> MembershipType { get; set; }
         public DbSet<HotelBookingSystem.Models.RoomType> RoomType { get; set; }
+        public DbSet<HotelBookingSystem.Models.Reservation> Reservation { get; set; }
     }
 }

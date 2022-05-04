@@ -5,17 +5,25 @@ namespace HotelBookingSystem.Models
 {
     public class Room
     {
-        public int Id { get; set; }
+        public int Id { get; set; } // PK
 
         [Required] 
-        [StringLength(255)] 
-        public string Name { get; set; }
+        [StringLength(255)]
+        [Display(Name = "房间号")]
+        public string Name { get; set; }    // 房间号
 
-        [Required] 
-        public RoomType RoomType { get; set; }
-        public byte RoomTypeId { get; set; }
+        [Required]
+        [Display(Name = "房间状态")]
+        public byte Status { get; set; }    // 房间状态
 
-        public DateTime DateCheckIn { get; set; } // 入住日期
-        public DateTime DateCheckOut { get; set; } // 退房日期
+        [Display(Name = "房间描述")]
+        public string Description { get; set; } // 房间描述
+
+        public RoomType RoomType { get; set; }  // 类型存放在这里
+        
+        [Required]
+        [Display(Name = "房间类型Id")]
+        public byte RoomTypeId { get; set; }    // 类型Id
+        
     }
 }
