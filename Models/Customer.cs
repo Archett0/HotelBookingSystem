@@ -15,6 +15,7 @@ namespace HotelBookingSystem.Models
         [Display(Name = "订阅推销邮件")]
         public bool IsSubscribedToNewsLetter { get; set; }  // 是否订阅推销邮件
 
+        [Display(Name = "会员类型")]
         public MembershipType MembershipType { get; set; }  // 保存这个用户的会员类型,有时候不需要
 
         [Display(Name = "会员类型")]

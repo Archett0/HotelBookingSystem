@@ -19,10 +19,11 @@ namespace HotelBookingSystem.Models
         [Display(Name = "房间描述")]
         public string Description { get; set; } // 房间描述
 
+        [Display(Name = "房间类型")]
         public RoomType RoomType { get; set; }  // 类型存放在这里
         
         [Required]
-        [Display(Name = "房间类型Id")]
+        [Display(Name = "房间类型")]
         public byte RoomTypeId { get; set; }    // 类型Id
         
     }

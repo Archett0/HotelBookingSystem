@@ -7,16 +7,18 @@ namespace HotelBookingSystem.Models
     {
         public int Id { get; set; } // PK
 
+        [Display(Name = "房间")]
         public Room Room { get; set; }  // 房间存放在这里
 
         [Required]
-        [Display(Name = "房间Id")]
+        [Display(Name = "房间")]
         public int RoomId { get; set; } // 房间Id
 
+        [Display(Name = "顾客")]
         public Customer Customer { get; set; }  // 顾客存放在这里
 
         [Required]
-        [Display(Name = "顾客Id")]
+        [Display(Name = "顾客")]
         public int CustomerId { get; set; } // 顾客Id
 
         [Required]
