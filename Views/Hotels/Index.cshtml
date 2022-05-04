@@ -1,21 +1,21 @@
-﻿@model IEnumerable<HotelBookingSystem.Models.Room>
+﻿@model IEnumerable<HotelBookingSystem.Models.Hotel>
 
 @{
 	ViewData["Title"] = "Index";
 	Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <br/>
-<h2>房间列表</h2>
+<h2>酒店列表</h2>
 
 <p>
-	<a asp-action="Create" class = "btn btn-primary">新建房间</a>
+	<a asp-action="Create" class = "btn btn-primary">新建酒店</a>
 </p>
 @if (!Model.Any())
 {
 	<div class="card border-info mb-3" style="width: 50%">
 		<div class="card-header">系统提示信息</div>
 		<div class="card-body">
-			<h4 class="card-title">暂无房间信息</h4>
+			<h4 class="card-title">暂无酒店信息</h4>
 			<p class="card-text">请检查你的数据库或联系管理员</p>
 		</div>
 	</div>
@@ -29,16 +29,16 @@ else
 				@Html.DisplayNameFor(model => model.Name)
 			</th>
 			<th>
-				@Html.DisplayNameFor(model => model.Status)
-			</th>
-			<th>
 				@Html.DisplayNameFor(model => model.Description)
 			</th>
 			<th>
-				@Html.DisplayNameFor(model => model.RoomType)
+				@Html.DisplayNameFor(model => model.Location)
 			</th>
 			<th>
-				@Html.DisplayNameFor(model => model.Hotel)
+				@Html.DisplayNameFor(model => model.PhoneNumber)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.Discount)
 			</th>
 			<th></th>
 		</tr>
@@ -51,16 +51,16 @@ else
 					@Html.DisplayFor(modelItem => item.Name)
 				</td>
 				<td>
-					@Html.DisplayFor(modelItem => item.Status)
-				</td>
-				<td>
 					@Html.DisplayFor(modelItem => item.Description)
 				</td>
 				<td>
-					@Html.DisplayFor(modelItem => item.RoomType.Name)
+					@Html.DisplayFor(modelItem => item.Location)
 				</td>
 				<td>
-					@Html.DisplayFor(modelItem => item.Hotel.Name)
+					@Html.DisplayFor(modelItem => item.PhoneNumber)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.Discount)
 				</td>
 				<td>
 					<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

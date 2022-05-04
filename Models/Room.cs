@@ -25,6 +25,12 @@ namespace HotelBookingSystem.Models
         [Required]
         [Display(Name = "房间类型")]
         public byte RoomTypeId { get; set; }    // 类型Id
+
+        [Display(Name = "所属酒店")]
+        public Hotel Hotel { get; set; }    // 所属酒店
         
+        [Required]
+        [Display(Name = "所属酒店")]
+        public int HotelId { get; set; }    // 所属酒店Id
     }
 }

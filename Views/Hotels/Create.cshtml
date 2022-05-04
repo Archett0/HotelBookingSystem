@@ -1,4 +1,4 @@
-﻿@model HotelBookingSystem.Models.Room
+﻿@model HotelBookingSystem.Models.Hotel
 
 @{
     ViewData["Title"] = "Create";
@@ -7,7 +7,7 @@
 
 <h1>Create</h1>
 
-<h4>Room</h4>
+<h4>Hotel</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -19,22 +19,24 @@
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Status" class="control-label"></label>
-                <input asp-for="Status" class="form-control" />
-                <span asp-validation-for="Status" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="Description" class="control-label"></label>
                 <input asp-for="Description" class="form-control" />
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="RoomTypeId" class="control-label"></label>
-                <select asp-for="RoomTypeId" class ="form-control" asp-items="ViewBag.RoomTypeId"></select>
+                <label asp-for="Location" class="control-label"></label>
+                <input asp-for="Location" class="form-control" />
+                <span asp-validation-for="Location" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="HotelId" class="control-label"></label>
-                <select asp-for="HotelId" class ="form-control" asp-items="ViewBag.HotelId"></select>
+                <label asp-for="PhoneNumber" class="control-label"></label>
+                <input asp-for="PhoneNumber" class="form-control" />
+                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Discount" class="control-label"></label>
+                <input asp-for="Discount" class="form-control" />
+                <span asp-validation-for="Discount" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

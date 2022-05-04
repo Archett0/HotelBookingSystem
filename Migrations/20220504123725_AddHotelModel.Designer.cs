@@ -4,14 +4,16 @@ using HotelBookingSystem.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace HotelBookingSystem.Migrations
 {
     [DbContext(typeof(HotelBookingSystemContext))]
-    partial class HotelBookingSystemContextModelSnapshot : ModelSnapshot
+    [Migration("20220504123725_AddHotelModel")]
+    partial class AddHotelModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -175,9 +177,6 @@ namespace HotelBookingSystem.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("HotelId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(255)
@@ -190,8 +189,6 @@ namespace HotelBookingSystem.Migrations
                         .HasColumnType("tinyint");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("HotelId");
 
                     b.HasIndex("RoomTypeId");
 
@@ -259,19 +256,11 @@ namespace HotelBookingSystem.Migrations
 
             modelBuilder.Entity("HotelBookingSystem.Models.Room", b =>
                 {
-                    b.HasOne("HotelBookingSystem.Models.Hotel", "Hotel")
-                        .WithMany()
-                        .HasForeignKey("HotelId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("HotelBookingSystem.Models.RoomType", "RoomType")
                         .WithMany()
                         .HasForeignKey("RoomTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Hotel");
 
                     b.Navigation("RoomType");
                 });
