@@ -6,73 +6,87 @@
 }
 <br/>
 <h1>注册</h1>
+<h4>创建新会员</h4>
+<hr/>
 <div class="row">
-	<div class="col-md-4">
-		<form asp-route-returnUrl="@Model.ReturnUrl" method="post">
-			<h4>创建新会员</h4>
-			<hr />
-			<div asp-validation-summary="All" class="text-danger"></div>
-			<div class="form-group">
-				<label asp-for="Input.LastName" class="mt-4"></label>
-				<input asp-for="Input.LastName" class="form-control" />
-				<span asp-validation-for="Input.LastName" class="text-danger"></span>
+	<form asp-route-returnUrl="@Model.ReturnUrl" method="post">
+		@* <div asp-validation-summary="All" class="text-danger"></div> *@
+		<div class="row g-3">
+			<div class="col col-md-4">
+				<div class="form-group">
+					<label asp-for="Input.LastName" class="form-label mt-4"></label>
+					<input asp-for="Input.LastName" class="form-control"/>
+					<span asp-validation-for="Input.LastName" class="text-danger"></span>
+				</div>
 			</div>
-			<div class="form-group">
-				<label asp-for="Input.FirstName" class="mt-4"></label>
-				<input asp-for="Input.FirstName" class="form-control" />
-				<span asp-validation-for="Input.FirstName" class="text-danger"></span>
+			<div class="col col-md-4">
+				<div class="form-group">
+					<label asp-for="Input.FirstName" class="form-label mt-4"></label>
+					<input asp-for="Input.FirstName" class="form-control"/>
+					<span asp-validation-for="Input.FirstName" class="text-danger"></span>
+				</div>
 			</div>
-			<div class="form-group">
-				<label asp-for="Input.Email" class="mt-4"></label>
-				<input asp-for="Input.Email" class="form-control" />
-				<span asp-validation-for="Input.Email" class="text-danger"></span>
+		</div>
+		<div class="row g-3">
+			<div class="col col-md-4">
+				<div class="form-group">
+					<label asp-for="Input.Email" class="form-label mt-4"></label>
+					<input asp-for="Input.Email" class="form-control"/>
+					<span asp-validation-for="Input.Email" class="text-danger"></span>
+				</div>
 			</div>
-			<div class="form-group">
-				<label asp-for="Input.Password" class="mt-4"></label>
-				<input asp-for="Input.Password" class="form-control" />
-				<span asp-validation-for="Input.Password" class="text-danger"></span>
+			<div class="col col-md-4">
+				<div class="form-group">
+					@Html.LabelFor(m => m.Input.Birthday, new { @class = "form-label mt-4"})
+					<input asp-for="Input.Birthday" class="form-control" />
+					@* @Html.TextBoxFor(m => m.Input.Birthday, "{0:d MMM yyyy}", new { @class = "form-control"}) // 可用但没法直接启用日期选择器 *@
+					@Html.ValidationMessageFor(m => m.Input.Birthday)
+				</div>
 			</div>
-			<div class="form-group">
-				<label asp-for="Input.ConfirmPassword" class="mt-4"></label>
-				<input asp-for="Input.ConfirmPassword" class="form-control" />
-				<span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+		</div>		
+		<div class="row g-3">
+			<div class="col col-md-4">
+				<div class="form-group">
+					<label asp-for="Input.MembershipTypeId" class="form-label mt-4">会员类别</label>
+					<select class="form-select" asp-for="Input.MembershipTypeId">
+						<option value="1">白银会员</option>
+						<option value="2">黄金会员</option>
+						<option value="3">铂金会员</option>
+						<option value="4">钻石会员</option>
+					</select>
+				</div>
 			</div>
-			<button type="submit" class="btn btn-primary mt-4">注册</button>
-		</form>
-	</div>
-	<div class="col-md-6 col-md-offset-2">
-		<section>
-			<h4>换个方法登录</h4>
-			<hr />
-			@{
-				if ((Model.ExternalLogins?.Count ?? 0) == 0)
-				{
-					<div>
-						<p>
-							@* There are no external authentication services configured. See <a href="https://go.microsoft.com/fwlink/?LinkID=532715">this article</a> *@
-							@* for details on setting up this ASP.NET application to support logging in via external services. *@
-							暂无可用的外部登录认证方式
-						</p>
-					</div>
-				}
-				else
-				{
-					<form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
-						<div>
-							<p>
-								@foreach (var provider in Model.ExternalLogins)
-								{
-									<button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
-								}
-							</p>
-						</div>
-					</form>
-				}
-			}
-		</section>
-	</div>
+			<div class="col col-md-4">
+				@* form group here *@				
+			</div>
+		</div>		
+		<div class="row g-3">
+			<div class="col col-md-4">
+				<div class="form-group">
+					<label asp-for="Input.Password" class="form-label mt-4"></label>
+					<input asp-for="Input.Password" class="form-control"/>
+					<span asp-validation-for="Input.Password" class="text-danger"></span>
+				</div>
+			</div>
+			<div class="col col-md-4">
+				<div class="form-group">
+					<label asp-for="Input.ConfirmPassword" class="form-label mt-4"></label>
+					<input asp-for="Input.ConfirmPassword" class="form-control"/>
+					<span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+				</div>
+			</div>
+		</div>
+		<div class="form-check mt-4">
+			@Html.CheckBoxFor(m => m.Input.IsSubscribedToNewsLetter,new { @class = "form-check-input"})
+			<label class="form-check-label">
+				订阅推销邮件?
+			</label>
+		</div>
+		@Html.Hidden("Input.IsAdmin",false)
+		<button type="submit" class="btn btn-primary mt-4">注册</button>
+	</form>
 </div>
 
-@* @section Scripts { *@
-@* 	<partial name="_ValidationScriptsPartial" /> *@
-@* } *@
+@section Scripts {
+	<partial name="_ValidationScriptsPartial" />
+}

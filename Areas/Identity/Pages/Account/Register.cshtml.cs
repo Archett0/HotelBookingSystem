@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using HotelBookingSystem.Areas.Identity.Data;
+using HotelBookingSystem.Data;
+using HotelBookingSystem.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -24,17 +26,20 @@ namespace HotelBookingSystem.Areas.Identity.Pages.Account
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly HotelBookingSystemContext _customerContext;
 
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            HotelBookingSystemContext customerContext)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _customerContext = customerContext;
         }
 
         [BindProperty]
@@ -62,15 +67,27 @@ namespace HotelBookingSystem.Areas.Identity.Pages.Account
             public string Email { get; set; }
 
             [Required]
-            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            [StringLength(100, ErrorMessage = "{0} 长度必须在 {2} 位到 {1} 位之间", MinimumLength = 6)]
             [DataType(DataType.Password)]
             [Display(Name = "密码")]
             public string Password { get; set; }
 
             [DataType(DataType.Password)]
             [Display(Name = "确认密码")]
-            [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+            [Compare("Password", ErrorMessage = "确认密码不一致")]
             public string ConfirmPassword { get; set; }
+
+            public bool IsAdmin { get; set; }    // 是否为管理员,0=customer,1=admin
+
+            public bool IsSubscribedToNewsLetter { get; set; }  // 是否订阅推销邮件
+
+            [Required]
+            [Display(Name = "会员类型")]
+            public byte MembershipTypeId { get; set; }  //会员类型Id
+
+            [Required]
+            [Display(Name = "生日")]
+            public DateTime Birthday { get; set; } // 顾客的生日
         }
 
         public async Task OnGetAsync(string returnUrl = null)
@@ -89,10 +106,32 @@ namespace HotelBookingSystem.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = Input.Email, Email = Input.Email, FirstName = Input.FirstName, LastName = Input.LastName};  // 在这里添加字段
+                var user = new ApplicationUser  // 在这里添加字段
+                {
+                    UserName = Input.Email, 
+                    Email = Input.Email, 
+                    FirstName = Input.FirstName, 
+                    LastName = Input.LastName,
+                    IsAdmin = false,
+                    IsSubscribedToNewsLetter = Input.IsSubscribedToNewsLetter,
+                    MembershipTypeId = Input.MembershipTypeId,
+                    Birthday = Input.Birthday
+                };
+
+                // 首先先创建一个Customer
+                Customer customer = new Customer();
+                customer.Name = Input.LastName + Input.FirstName;
+                customer.IsSubscribedToNewsLetter = Input.IsSubscribedToNewsLetter;
+                customer.MembershipTypeId = Input.MembershipTypeId;
+                customer.Birthday = Input.Birthday;
+                customer.Email = Input.Email;   // 已经初始化完成这个customer，看下面的注释
+
+                // 然后执行创建用户的操作
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
+                    _customerContext.Customer.Add(customer);    // 如果用户成功注册，则添加这个customer
+                    await _customerContext.SaveChangesAsync();
                     _logger.LogInformation("User created a new account with password.");
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
