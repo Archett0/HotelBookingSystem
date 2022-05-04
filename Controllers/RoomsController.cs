@@ -22,7 +22,8 @@ namespace HotelBookingSystem.Controllers
         // GET: Rooms
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Room.ToListAsync());
+            var hotelBookingSystemContext = _context.Room.Include(r => r.RoomType);
+            return View(await hotelBookingSystemContext.ToListAsync());
         }
 
         // GET: Rooms/Details/5
@@ -34,6 +35,7 @@ namespace HotelBookingSystem.Controllers
             }
 
             var room = await _context.Room
+                .Include(r => r.RoomType)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (room == null)
             {
@@ -46,6 +48,7 @@ namespace HotelBookingSystem.Controllers
         // GET: Rooms/Create
         public IActionResult Create()
         {
+            ViewData["RoomTypeId"] = new SelectList(_context.RoomType, "Id", "Name");
             return View();
         }
 
@@ -54,7 +57,7 @@ namespace HotelBookingSystem.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,RoomTypeId,DateCheckIn,DateCheckOut")] Room room)
+        public async Task<IActionResult> Create([Bind("Id,Name,Status,Description,RoomTypeId")] Room room)
         {
             if (ModelState.IsValid)
             {
@@ -62,6 +65,7 @@ namespace HotelBookingSystem.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["RoomTypeId"] = new SelectList(_context.RoomType, "Id", "Name", room.RoomTypeId);
             return View(room);
         }
 
@@ -78,6 +82,7 @@ namespace HotelBookingSystem.Controllers
             {
                 return NotFound();
             }
+            ViewData["RoomTypeId"] = new SelectList(_context.RoomType, "Id", "Name", room.RoomTypeId);
             return View(room);
         }
 
@@ -86,7 +91,7 @@ namespace HotelBookingSystem.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,RoomTypeId,DateCheckIn,DateCheckOut")] Room room)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Status,Description,RoomTypeId")] Room room)
         {
             if (id != room.Id)
             {
@@ -113,6 +118,7 @@ namespace HotelBookingSystem.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["RoomTypeId"] = new SelectList(_context.RoomType, "Id", "Name", room.RoomTypeId);
             return View(room);
         }
 
@@ -125,6 +131,7 @@ namespace HotelBookingSystem.Controllers
             }
 
             var room = await _context.Room
+                .Include(r => r.RoomType)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (room == null)
             {
