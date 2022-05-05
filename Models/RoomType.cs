@@ -10,6 +10,7 @@ namespace HotelBookingSystem.Models
         [StringLength(255)]
         public string Name { get; set; }    // 房间类型
 
+        [Display(Name = "房间标准价格")]
         public double Price { get; set; }   // 房间价格
     }
 }

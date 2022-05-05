@@ -73,6 +73,115 @@ namespace HotelBookingSystem.Controllers
             return View(roomSearchViewModel);
         }
 
+
+        [HttpGet]   // 这个方法用来给用户主页面提供数据
+        public async Task<IActionResult> DirectToCustomerIndex()
+        {
+            var viewModel = new CustomerReservationViewModel
+            {
+                RoomTypes = await _context.RoomType.ToListAsync(),
+                CheckInTime = DateTime.Today,
+                CheckOutTime = DateTime.Today.AddDays(1)
+            };
+
+            return View("/Views/CustomerBusinesses/CustomerIndex.cshtml", viewModel);
+        }
+
+        [HttpGet]   // 这个方法用来根据用户输入查询房间
+        public async Task<IActionResult> RoomSearch(string roomType, DateTime checkInTime, DateTime checkOutTime)
+        {
+            // Error return
+            if (checkInTime.CompareTo(checkOutTime) > 0)
+            {
+                ViewData["ErrorMessage"] = "Error";
+                var viewModel = new CustomerReservationViewModel
+                {
+                    RoomTypes = await _context.RoomType.ToListAsync(),
+                    CheckInTime = DateTime.Today,
+                    CheckOutTime = DateTime.Today.AddDays(1)
+                };
+                return View("/Views/CustomerBusinesses/CustomerIndex.cshtml", viewModel);
+            }
+
+            // Get all rooms
+            var hotelBookingSystemContext = _context.Room
+                .Include(r => r.Hotel)
+                .Include(r => r.RoomType);
+            IEnumerable<Room> allRooms = await hotelBookingSystemContext.ToListAsync();
+
+            // Select the rooms which are available and satisfies the type
+            var clearRooms = new List<Room>();
+            foreach (var room in allRooms)
+            {
+                if (roomType == null)
+                {
+                    clearRooms.Add(room);
+                }
+                else if (room.RoomType.Name.Equals(roomType) && room.Status == 0)
+                {
+                    clearRooms.Add(room);
+                }
+            }
+
+            // Get all reservations contains the upper cleared-rooms
+            var allReservations = await _context.Reservation.ToListAsync();
+            var clearReservations = new List<Reservation>();
+            foreach (var reservation in allReservations)
+            {
+                if (clearRooms.Contains(reservation.Room) && reservation.Status != 3)   // 找出所有未完成订单
+                {
+                    clearReservations.Add(reservation);
+                }
+            }
+
+            // Match with reservation records to find time-available rooms
+            var resultRooms = new List<Room>();
+            foreach (var currentRoom in clearRooms)
+            {
+                var roomAvailable = true;
+                foreach (var reservation in clearReservations)
+                {
+                    if (reservation.RoomId != currentRoom.Id) continue;
+                    if (checkInTime.CompareTo(reservation.DateCheckIn) >= 0 &&
+                        checkInTime.CompareTo(reservation.DateCheckOut) <= 0)
+                    {
+                        roomAvailable = false;
+                        break;
+                    }
+                    if (checkOutTime.CompareTo(reservation.DateCheckIn) >= 0 &&
+                        checkOutTime.CompareTo(reservation.DateCheckOut) <= 0)
+                    {
+                        roomAvailable = false;
+                        break;
+                    }
+                    if (checkInTime.CompareTo(reservation.DateCheckIn) <= 0 &&
+                        checkOutTime.CompareTo(reservation.DateCheckOut) >= 0)
+                    {
+                        roomAvailable = false;
+                        break;
+                    }
+                    if (checkInTime.CompareTo(reservation.DateCheckIn) >= 0 &&
+                        checkOutTime.CompareTo(reservation.DateCheckOut) <= 0)
+                    {
+                        roomAvailable = false;
+                        break;
+                    }
+                }
+                if (!roomAvailable)
+                {
+                    Console.WriteLine("Room: {0} is not available so it is removed from the ready list", currentRoom.Name);
+                }
+                else
+                {
+                    resultRooms.Add(currentRoom);
+                }
+            }
+
+            // Now we get all the rooms available, we have to send it back to the customer
+
+            return View("/Views/CustomerBusinesses/CustomerRoomList.cshtml", resultRooms);
+        }
+
         [HttpPost]
         public string Index(string searchString, bool notUsed)
         {

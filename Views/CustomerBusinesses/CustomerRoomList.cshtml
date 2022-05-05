@@ -1,0 +1,74 @@
+﻿@model IEnumerable<Room>
+@{
+	ViewData["Title"] = "CustomerRoomList";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<br/>
+<h2>搜索结果</h2>
+@if (!Model.Any())
+{
+	<p>没有可用的房间！</p>
+}
+else
+{
+	<table class="table table-bordered table-hover">
+		<thead>
+		<tr>
+			<th>
+				@Html.DisplayNameFor(model => model.Name)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.Description)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.RoomType)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.Hotel)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.Hotel.Location)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.Hotel.Discount)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.RoomType.Price)
+			</th>
+			<th>Available Options</th>
+		</tr>
+		</thead>
+		<tbody>
+		@foreach (var item in Model)
+		{
+			<tr>
+				<td>
+					@Html.DisplayFor(modelItem => item.Name)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.Description)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.RoomType.Name)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.Hotel.Name)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.Hotel.Location)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.Hotel.Discount)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.RoomType.Price)
+				</td>
+				<td>
+					<a asp-action="Details" asp-route-id="@item.Id">Details</a>
+				</td>
+			</tr>
+		}
+		</tbody>
+
+	</table>
+}

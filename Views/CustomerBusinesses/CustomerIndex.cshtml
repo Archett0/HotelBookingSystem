@@ -1,0 +1,49 @@
+﻿@model HotelBookingSystem.ViewModels.CustomerReservationViewModel
+@{
+	ViewData["Title"] = "CustomerIndex";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@if (ViewData["ErrorMessage"] != null && ViewData["ErrorMessage"].Equals("Error"))
+{
+	<br/>
+	<br/>
+	<br/>
+	<div class="alert alert-dismissible alert-danger mb-3" style="width: 25%">
+		<button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+		<h4 class="alert-heading">系统提示信息</h4>
+		<strong>请检查输入</strong>退房日期不可以小于入住日期
+	</div>
+}
+
+<div class="card bg-light mb-3 position-absolute top-50 start-30 translate-middle-y" style="width: 30%">
+	<br/>
+	<h3 class="card-header">查询房间信息</h3>
+	<div class="card-body">
+		<form asp-controller="Rooms" asp-action="RoomSearch" method="get">
+			<div class="row">
+				<div class="col-sm-6 w-50">
+					<div class="form-group">
+						<label asp-for="CheckInTime" class="form-label mt-4"></label>
+						<input type="date" asp-for="CheckInTime" class="form-control"/>
+						@Html.ValidationMessageFor(d => d.CheckOutTime)
+					</div>
+				</div>
+				<div class="col-sm-6 w-50">
+					<div class="form-group">
+						<label asp-for="CheckOutTime" class="form-label mt-4"></label>
+						<input type="date" asp-for="CheckOutTime" class="form-control"/>
+						<span asp-validation-for="CheckOutTime" class="text-danger"></span>
+						@Html.ValidationMessageFor(d => d.CheckOutTime)
+					</div>
+				</div>
+			</div>
+			<div class="form-group w-50">
+				@Html.LabelFor(r => r.RoomType, new { @class = "form-label mt-4"})
+				@Html.DropDownListFor(r => r.RoomType, new SelectList(Model.RoomTypes, "Name", "Name"), "全部房间类别", new { @class = "form-control" })
+			</div>
+			<hr/>
+			<button type="submit" class="btn btn-primary text-end">搜索</button>
+		</form>
+	</div>
+</div>
