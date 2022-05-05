@@ -7,10 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using HotelBookingSystem.Data;
 using HotelBookingSystem.Models;
+using HotelBookingSystem.ViewModels;
 
 namespace HotelBookingSystem.Controllers
 {
-    public class RoomsController : Controller
+    public class RoomsController : Controller   // TODO:正修改此控制器来添加搜索服务
     {
         private readonly HotelBookingSystemContext _context;
 
@@ -19,11 +20,63 @@ namespace HotelBookingSystem.Controllers
             _context = context;
         }
 
-        // GET: Rooms
-        public async Task<IActionResult> Index()
+        // // GET: Rooms or Rooms?searchString=
+        // public async Task<IActionResult> Index(string searchString) // 增加了根据名称查找的功能
+        // {
+        //     var hotelBookingSystemContext = _context.Room.Include(r => r.Hotel).Include(r => r.RoomType);
+        //     var rooms = from room in hotelBookingSystemContext select room;
+        //     if (!String.IsNullOrEmpty(searchString))
+        //     {
+        //         rooms = rooms.Where(s => s.Name.Contains(searchString));
+        //     }
+        //     return View(await rooms.ToListAsync());
+        // }
+
+        // GET: Rooms (Advanced methods)    // TODO: 注意这里筛选功能的写法！
+        public async Task<IActionResult> Index(string roomType, string roomHotel, string roomName)
         {
-            var hotelBookingSystemContext = _context.Room.Include(r => r.Hotel).Include(r => r.RoomType);
-            return View(await hotelBookingSystemContext.ToListAsync());
+            var hotelBookingSystemContext = _context.Room
+                .Include(r => r.Hotel)
+                .Include(r => r.RoomType);
+            
+            // using LINQ
+            IQueryable<string> hotelQuery = // TODO:设置查询语句
+                from r in hotelBookingSystemContext orderby r.Hotel.Name select r.Hotel.Name;
+
+            IQueryable<string> typeQuery = // TODO:设置查询语句
+                from r in hotelBookingSystemContext orderby r.RoomType.Id select r.RoomType.Name;
+
+            var rooms = from room in hotelBookingSystemContext select room; // TODO:获取全部房间
+
+            if (!String.IsNullOrEmpty(roomName))
+            {
+                rooms = rooms.Where(s => s.Name.Contains(roomName));    // TODO:简单筛选房间名称
+            }
+
+            if (!String.IsNullOrEmpty(roomType))
+            {
+                rooms = rooms.Where(x => x.RoomType.Name == roomType);  // TODO:筛选房间类型
+            }
+
+            if (!String.IsNullOrEmpty(roomHotel))
+            {
+                rooms = rooms.Where(x => x.Hotel.Name == roomHotel);    // TODO:筛选所属酒店
+            }
+
+            var roomSearchViewModel = new RoomSearchViewModel
+            {
+                Hotels = new SelectList(await hotelQuery.Distinct().ToListAsync()), // TODO:设置下拉菜单
+                RoomTypes = new SelectList(await typeQuery.Distinct().ToListAsync()),   // TODO:设置下拉菜单
+                Rooms = await rooms.ToListAsync()
+            };
+
+            return View(roomSearchViewModel);
+        }
+
+        [HttpPost]
+        public string Index(string searchString, bool notUsed)
+        {
+            return "From [HttpPost]Index: filter on " + searchString;
         }
 
         // GET: Rooms/Details/5

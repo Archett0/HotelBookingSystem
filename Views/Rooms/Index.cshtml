@@ -1,4 +1,5 @@
-﻿@model IEnumerable<HotelBookingSystem.Models.Room>
+﻿@* @model IEnumerable<HotelBookingSystem.Models.Room> *@
+@model HotelBookingSystem.ViewModels.RoomSearchViewModel
 
 @{
 	ViewData["Title"] = "Index";
@@ -10,7 +11,29 @@
 <p>
 	<a asp-action="Create" class = "btn btn-primary">新建房间</a>
 </p>
-@if (!Model.Any())
+<form asp-controller="Rooms" asp-action="Index" method="get">
+	<div class="input-group mb-3 w-25">
+		<input type="text" class="form-control" asp-for="RoomName" placeholder="搜索房间名称" aria-label="房间名称" aria-describedby="button-addon2">
+		<button class="btn btn-primary" type="submit" id="button-addon2">搜索</button>
+	</div>
+	<div class="form-group mb-3 w-25">
+		<select class="form-select" asp-for="RoomHotel" asp-items="Model.Hotels">
+			<option value="">全部酒店</option>
+		</select>
+	</div>	
+	<div class="form-group mb-3 w-25">
+		<select class="form-select" asp-for="RoomType" asp-items="Model.RoomTypes">
+			<option value="">全部房型</option>
+		</select>
+	</div>
+	@* <select asp-for="RoomHotel" asp-items="Model.Hotels"> *@
+	@* 	<option value="">全部酒店</option> *@
+	@* </select> *@
+	@* <select asp-for="RoomType" asp-items="Model.RoomTypes"> *@
+	@* 	<option value="">全部房型</option> *@
+	@* </select> *@
+</form>
+@if (Model == null)
 {
 	<div class="card border-info mb-3" style="width: 50%">
 		<div class="card-header">系统提示信息</div>
@@ -26,25 +49,25 @@ else
 		<thead>
 		<tr>
 			<th>
-				@Html.DisplayNameFor(model => model.Name)
+				@Html.DisplayNameFor(model => model.Rooms[0].Name)
 			</th>
 			<th>
-				@Html.DisplayNameFor(model => model.Status)
+				@Html.DisplayNameFor(model => model.Rooms[0].Status)
 			</th>
 			<th>
-				@Html.DisplayNameFor(model => model.Description)
+				@Html.DisplayNameFor(model => model.Rooms[0].Description)
 			</th>
 			<th>
-				@Html.DisplayNameFor(model => model.RoomType)
+				@Html.DisplayNameFor(model => model.Rooms[0].RoomType)
 			</th>
 			<th>
-				@Html.DisplayNameFor(model => model.Hotel)
+				@Html.DisplayNameFor(model => model.Rooms[0].Hotel)
 			</th>
-			<th></th>
+			<th>Available Options</th>
 		</tr>
 		</thead>
 		<tbody>
-		@foreach (var item in Model)
+		@foreach (var item in Model.Rooms)
 		{
 			<tr>
 				<td>
