@@ -59,9 +59,11 @@ html {
 }
 
 body {
-  /* Margin bottom by footer height */
-  margin-bottom: 60px;
+    /* Margin bottom by footer height */
+    margin-bottom: 60px;
     font-family: "Roboto", sans-serif;
+    /* background: url("/lib/hotelbackground.jpg") no-repeat; */
+    /* background-size: cover; */
 }
 .footer {
   position: absolute;
@@ -77,4 +79,10 @@ body {
 
 .input-validation-error {
     border: 2px solid red;
+}
+
+/* Customer page back ground */
+.customer-background {
+    background: url("/lib/hotelbackground.jpg") no-repeat;
+    background-size: cover;
 }

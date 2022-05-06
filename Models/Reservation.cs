@@ -35,5 +35,10 @@ namespace HotelBookingSystem.Models
         [Required]
         [Display(Name = "预订状态")]
         public byte Status { get; set; }    // 本预订的状态
+
+        [Required]
+        [Display(Name = "订单金额")]
+        public double TotalPrice { get; set; }  // 本预订顾客实际支付
+
     }
 }

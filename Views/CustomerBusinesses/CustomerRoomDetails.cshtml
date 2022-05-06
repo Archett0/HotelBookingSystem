@@ -1,10 +1,14 @@
-﻿@model HotelBookingSystem.ViewModels.CustomerReservationViewModel
+﻿@using Microsoft.AspNetCore.Identity
+@using HotelBookingSystem.Areas.Identity.Data
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@model HotelBookingSystem.ViewModels.CustomerReservationViewModel
 @{
 	ViewData["Title"] = "CustomerRoomDetails";
 	Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <br/>
-@* <h2>确认订单(房间详情)</h2> *@
 <div class="row">
 	<div class="col">
 		<div class="card bg-light mb-3 text-center" style="width: 100%">
@@ -121,7 +125,7 @@
 						<li class="list-group-item mb-5 list-group-item-success">总价： @Model.TotalPrice CNY</li>
 					</ul>
 					<div class="row justify-content-center">
-						<button type="button" class="btn btn-primary" style="width: 75%">马上预订</button>
+						@Html.ActionLink("马上预订","CustomerNewReservation","Reservations",new { roomId = Model.ThisRoom.Id, checkInTime = Model.CheckInTime, checkOutTime = Model.CheckOutTime, userId = Model.Customer.Id, totalPrice = Model.TotalPrice }, new { @class = "btn btn-primary w-75" })
 					</div>
 				</div>
 			</div>

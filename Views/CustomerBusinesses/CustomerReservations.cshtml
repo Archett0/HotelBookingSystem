@@ -1,0 +1,172 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using HotelBookingSystem.Areas.Identity.Data
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@model List<Reservation>
+@{
+	ViewData["Title"] = "CustomerReservations";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<br/>
+<ul class="nav nav-pills">
+	<li class="nav-item">
+		@Html.ActionLink("全部订单", "CustomerAllReservations", "Reservations", new { userEmail = UserManager.GetUserName(User) }, new { @class = "nav-link active" })
+	</li>
+	<li class="nav-item">
+		@Html.ActionLink("未支付", "ReservationsFilter", "Reservations", new { filterMethod = (byte)0, userEmail = UserManager.GetUserName(User) }, new { @class = "nav-link" })
+	</li>
+	<li class="nav-item">
+		@Html.ActionLink("已支付", "ReservationsFilter", "Reservations", new { filterMethod = (byte)1, userEmail = UserManager.GetUserName(User) }, new { @class = "nav-link" })
+	</li>
+	<li class="nav-item">
+		@Html.ActionLink("进行中", "ReservationsFilter", "Reservations", new { filterMethod = (byte)2, userEmail = UserManager.GetUserName(User) }, new { @class = "nav-link" })
+	</li>
+	<li class="nav-item">
+		@Html.ActionLink("已完成", "ReservationsFilter", "Reservations", new { filterMethod = (byte)3, userEmail = UserManager.GetUserName(User) }, new { @class = "nav-link" })
+	</li>
+</ul>
+<hr/>
+@if (!Model.Any())
+{
+	<div class="card border-info mb-3" style="width: 50%">
+		<div class="card-header">系统提示信息</div>
+		<div class="card-body">
+			<h4 class="card-title">这个页面还没有订单！</h4>
+			<p class="card-text">请更改您的查询类别或进行新预订</p>
+		</div>
+	</div>
+}
+else
+{
+@foreach (var reservation in Model)
+{
+	<div class="row">
+		<div class="col">
+			<div class="card bg-light mb-3 text-center" style="width: 100%">
+				<br/>
+				<h3 class="card-header">订单#@reservation.Id 基本信息 </h3>
+				<div class="card-body">
+					<div class="row">
+						<div class="col-sm-6 w-50">
+							<div class="form-group">
+								<div class="card">
+									<div class="card-body">
+										<img src="@reservation.Room.RoomType.PictureUrl" width="100%" alt="Demo room picture"/>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-6 w-50">
+							<div class="form-group">
+								<div class="card">
+									<div class="card-body">
+										<h5 class="card-title">房间类型</h5>
+										<p class="card-text">@reservation.Room.RoomType.Name</p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-6 w-50">
+							<div class="form-group">
+								<div class="card">
+									<div class="card-body">
+										<h5 class="card-title">入住日期</h5>
+										<p class="card-text">@reservation.DateCheckIn.ToShortDateString()</p>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-6 w-50">
+							<div class="form-group">
+								<div class="card">
+									<div class="card-body">
+										<h5 class="card-title">退房日期</h5>
+										<p class="card-text">@reservation.DateCheckOut.ToShortDateString()</p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-6 w-50">
+							<div class="form-group">
+								<div class="card">
+									<div class="card-body">
+										<h5 class="card-title">房间介绍</h5>
+										<p class="card-text">@reservation.Room.Description</p>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-6 w-50">
+							<div class="form-group">
+								<div class="card">
+									<div class="card-body">
+										<h5 class="card-title">酒店</h5>
+										<p class="card-text">@reservation.Room.Hotel.Name</p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-6 w-50">
+							<div class="form-group">
+								<div class="card">
+									<div class="card-body">
+										<h5 class="card-title">酒店位置</h5>
+										<p class="card-text">@reservation.Room.Hotel.Location</p>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-6 w-50">
+							<div class="form-group">
+								<div class="card">
+									<div class="card-body">
+										<h5 class="card-title">酒店电话</h5>
+										<p class="card-text">@reservation.Room.Hotel.PhoneNumber</p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col">
+			<div class="card bg-light mb-3 text-center" style="width: 100%">
+				<br/>
+				<div class="container">
+					<h3 class="card-header">付款信息</h3>
+					<div class="card-body">
+						<ul class="list-group list-group-flush mb-3">
+							<li class="list-group-item mb-3">原价： @reservation.Room.RoomType.Price CNY</li>
+							@if (@reservation.Room.Hotel.Discount != 0)
+							{
+								<li class="list-group-item mb-3 list-group-item-success">酒店折扣： @reservation.Room.Hotel.Discount CNY</li>
+							}
+							else
+							{
+								<li class="list-group-item mb-3">酒店折扣： 暂无</li>
+							}
+							<li class="list-group-item mb-3 list-group-item-success">会员折扣减免： @reservation.Customer.MembershipType.DiscountRate%</li>
+							<li class="list-group-item mb-5 list-group-item-success">总价： @reservation.TotalPrice CNY</li>
+						</ul>
+						@if (@reservation.Status == 0)
+						{
+							<div class="row justify-content-center">
+								@Html.ActionLink("付款", "Index", "Reservations", new { reservationId = reservation.Id, userId = reservation.Customer.Id }, new { @class = "btn btn-primary w-75" })
+							</div>
+						}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<hr/>
+}
+}

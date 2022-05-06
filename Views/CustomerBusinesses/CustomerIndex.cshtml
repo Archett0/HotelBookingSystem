@@ -47,7 +47,7 @@
 				@Html.LabelFor(r => r.RoomType, new { @class = "form-label mt-4"})
 				@Html.DropDownListFor(r => r.RoomType, new SelectList(Model.RoomTypes, "Name", "Name"), "全部房间类别", new { @class = "form-control" })
 			</div>
-			<div class="form-group">
+			<div class="form-group" style="visibility: hidden">
 				<fieldset disabled="">
 					<label class="form-label" asp-for="UserId"></label>
 					<input class="form-control" type="text" value="@UserManager.GetUserName(User)">

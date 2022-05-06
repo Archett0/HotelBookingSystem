@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using HotelBookingSystem.Data;
 using HotelBookingSystem.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HotelBookingSystem.Controllers
 {
@@ -44,6 +45,78 @@ namespace HotelBookingSystem.Controllers
             }
 
             return View(reservation);
+        }
+
+        [Authorize]
+        public async Task<IActionResult> CustomerAllReservations(string userEmail)
+        {
+            var reservationsContext = _context.Reservation
+                .Include(r => r.Room)
+                .Include(r => r.Room.RoomType)
+                .Include(r => r.Room.Hotel)
+                .Include(r => r.Customer)
+                .Include(r => r.Customer.MembershipType);
+
+            var allReservations = from reservation in reservationsContext select reservation;
+
+            allReservations = allReservations.Where(s => s.Customer.Email.Equals(userEmail));
+
+            var userReservations = await allReservations.ToListAsync();
+
+            return View("/Views/CustomerBusinesses/CustomerReservations.cshtml", userReservations);
+        }
+
+        public async Task<IActionResult> ReservationsFilter(string userEmail, byte filterMethod)
+        {
+            var reservationsContext = _context.Reservation
+                .Include(r => r.Room)
+                .Include(r => r.Room.RoomType)
+                .Include(r => r.Room.Hotel)
+                .Include(r => r.Customer)
+                .Include(r => r.Customer.MembershipType);
+
+            var allReservations = from reservation in reservationsContext select reservation;
+
+            IQueryable<byte> filterQueryable =
+                from reservation in reservationsContext orderby reservation.Status select reservation.Status;
+
+            allReservations = allReservations.Where(s => s.Customer.Email.Equals(userEmail));
+            allReservations = allReservations.Where(s => s.Status == filterMethod);
+            var userReservations = await allReservations.ToListAsync();
+
+            return View("/Views/CustomerBusinesses/CustomerReservations.cshtml", userReservations);
+        }
+
+        // TODO:完成这个下订单模块
+        public async Task<IActionResult> CustomerNewReservation(int roomId, DateTime checkInTime,
+            DateTime checkOutTime, int userId, double totalPrice)
+        {
+            var newReservation = new Reservation
+            {
+                RoomId = roomId,
+                CustomerId = userId,
+                DateCheckIn = checkInTime,
+                DateCheckOut = checkOutTime,
+                TotalPrice = totalPrice
+            };
+
+            var targetUser = await _context.Customer.Where(c => c.Id == userId).FirstOrDefaultAsync();
+            var targetRoom = await _context.Room.Where(c => c.Id == roomId).FirstOrDefaultAsync();
+            var descriptionString = "顾客 " + targetUser.Name 
+                                         + " 在 " + DateTime.Now 
+                                         + " 预定了 " + targetRoom.Name
+                                         + "，时段为 " + newReservation.DateCheckIn.ToShortDateString()
+                                         + "-" + newReservation.DateCheckOut.ToShortDateString()
+                                         + "，订单金额为 " + newReservation.TotalPrice;
+            Console.WriteLine(descriptionString);
+            newReservation.Description = descriptionString;
+            newReservation.Status = 0;
+
+            _context.Reservation.Add(newReservation);
+            await _context.SaveChangesAsync();
+
+            // Now redirect to reservation list page
+            return RedirectToAction(nameof(CustomerAllReservations),new { userEmail = targetUser.Email});
         }
 
         // GET: Reservations/Create

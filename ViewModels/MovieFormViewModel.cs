@@ -8,19 +8,6 @@ namespace HotelBookingSystem.ViewModels
         public IEnumerable<RoomType> RoomTypes { get; set; }
         public Movie Movie { get; set; }
 
-        public string Title
-        {
-            get
-            {
-                if (Movie != null && Movie.Id != null)
-                {
-                    return "修改电影信息";
-                }
-                else
-                {
-                    return "新增电影";
-                }
-            }
-        }
+        public string Title => Movie != null ? "修改电影信息" : "新增电影";
     }
 }

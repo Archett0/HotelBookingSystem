@@ -10,9 +10,15 @@
 }
 <br/>
 <h2>搜索结果</h2>
-@if (Model == null)
+@if (!Model.ResultRooms.Any())
 {
-	<p>没有可用的房间！</p>
+	<div class="card border-info mb-3" style="width: 50%">
+		<div class="card-header">系统提示信息</div>
+		<div class="card-body">
+			<h4 class="card-title">没有可用的房间！</h4>
+			<p class="card-text">请更改您的日期或查看全部房型</p>
+		</div>
+	</div>
 }
 else
 {
@@ -40,7 +46,7 @@ else
 			<th>
 				@Html.DisplayNameFor(model => model.ResultRooms.ElementAt(0).RoomType.Price)
 			</th>
-			<th>Available Options</th>
+			<th>可选操作</th>
 		</tr>
 		</thead>
 		<tbody>
@@ -69,7 +75,7 @@ else
 					@Html.DisplayFor(modelItem => item.RoomType.Price)
 				</td>
 				<td>
-					@Html.ActionLink("查看详情","SelectedRoomDetail","Rooms",new { id = item.Id, checkInTime = Model.CheckInTime, checkOutTime = Model.CheckOutTime, userEmail = UserManager.GetUserName(User) })
+					@Html.ActionLink("查看详情","SelectedRoomDetail","Rooms",new { id = item.Id, checkInTime = Model.CheckInTime, checkOutTime = Model.CheckOutTime, userEmail = UserManager.GetUserName(User) }, new {@class = "btn btn-primary"})
 				</td>
 			</tr>
 		}
