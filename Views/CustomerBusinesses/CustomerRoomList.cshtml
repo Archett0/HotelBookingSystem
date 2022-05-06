@@ -1,11 +1,16 @@
-﻿@model IEnumerable<Room>
+﻿@using Microsoft.AspNetCore.Identity
+@using HotelBookingSystem.Areas.Identity.Data
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@model HotelBookingSystem.ViewModels.CustomerReservationViewModel
 @{
 	ViewData["Title"] = "CustomerRoomList";
 	Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <br/>
 <h2>搜索结果</h2>
-@if (!Model.Any())
+@if (Model == null)
 {
 	<p>没有可用的房间！</p>
 }
@@ -15,31 +20,31 @@ else
 		<thead>
 		<tr>
 			<th>
-				@Html.DisplayNameFor(model => model.Name)
+				@Html.DisplayNameFor(model => model.ResultRooms.ElementAt(0).Name)
 			</th>
 			<th>
-				@Html.DisplayNameFor(model => model.Description)
+				@Html.DisplayNameFor(model => model.ResultRooms.ElementAt(0).Description)
 			</th>
 			<th>
-				@Html.DisplayNameFor(model => model.RoomType)
+				@Html.DisplayNameFor(model => model.ResultRooms.ElementAt(0).RoomType)
 			</th>
 			<th>
-				@Html.DisplayNameFor(model => model.Hotel)
+				@Html.DisplayNameFor(model => model.ResultRooms.ElementAt(0).Hotel)
 			</th>
 			<th>
-				@Html.DisplayNameFor(model => model.Hotel.Location)
+				@Html.DisplayNameFor(model => model.ResultRooms.ElementAt(0).Hotel.Location)
 			</th>
 			<th>
-				@Html.DisplayNameFor(model => model.Hotel.Discount)
+				@Html.DisplayNameFor(model => model.ResultRooms.ElementAt(0).Hotel.Discount)
 			</th>
 			<th>
-				@Html.DisplayNameFor(model => model.RoomType.Price)
+				@Html.DisplayNameFor(model => model.ResultRooms.ElementAt(0).RoomType.Price)
 			</th>
 			<th>Available Options</th>
 		</tr>
 		</thead>
 		<tbody>
-		@foreach (var item in Model)
+		@foreach (var item in Model.ResultRooms)
 		{
 			<tr>
 				<td>
@@ -64,7 +69,7 @@ else
 					@Html.DisplayFor(modelItem => item.RoomType.Price)
 				</td>
 				<td>
-					<a asp-action="Details" asp-route-id="@item.Id">Details</a>
+					@Html.ActionLink("查看详情","SelectedRoomDetail","Rooms",new { id = item.Id, checkInTime = Model.CheckInTime, checkOutTime = Model.CheckOutTime, userEmail = UserManager.GetUserName(User) })
 				</td>
 			</tr>
 		}

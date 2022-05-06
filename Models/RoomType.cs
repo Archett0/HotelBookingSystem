@@ -12,5 +12,9 @@ namespace HotelBookingSystem.Models
 
         [Display(Name = "房间标准价格")]
         public double Price { get; set; }   // 房间价格
+
+        [Display(Name = "房间图片")]
+        public string PictureUrl { get; set; }  // 房间示例图片
+
     }
 }

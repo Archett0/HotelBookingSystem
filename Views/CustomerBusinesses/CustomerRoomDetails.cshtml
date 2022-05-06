@@ -1,0 +1,130 @@
+﻿@model HotelBookingSystem.ViewModels.CustomerReservationViewModel
+@{
+	ViewData["Title"] = "CustomerRoomDetails";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<br/>
+@* <h2>确认订单(房间详情)</h2> *@
+<div class="row">
+	<div class="col">
+		<div class="card bg-light mb-3 text-center" style="width: 100%">
+			<br/>
+			<h3 class="card-header">房间信息</h3>
+			<div class="card-body">
+				<div class="row">
+					<div class="col-sm-6 w-50">
+						<div class="form-group">
+							<div class="card">
+								<div class="card-body">
+									<img src="@Model.ThisRoom.RoomType.PictureUrl" width="100%" alt="Demo room picture"/>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-sm-6 w-50">
+						<div class="form-group">
+							<div class="card">
+								<div class="card-body">
+									<h5 class="card-title">房间类型</h5>
+									<p class="card-text">@Model.ThisRoom.RoomType.Name</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-6 w-50">
+						<div class="form-group">
+							<div class="card">
+								<div class="card-body">
+									<h5 class="card-title">入住日期</h5>
+									<p class="card-text">@Model.CheckInTime.ToShortDateString()</p>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-sm-6 w-50">
+						<div class="form-group">
+							<div class="card">
+								<div class="card-body">
+									<h5 class="card-title">退房日期</h5>
+									<p class="card-text">@Model.CheckOutTime.ToShortDateString()</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-6 w-50">
+						<div class="form-group">
+							<div class="card">
+								<div class="card-body">
+									<h5 class="card-title">房间介绍</h5>
+									<p class="card-text">@Model.ThisRoom.Description</p>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-sm-6 w-50">
+						<div class="form-group">
+							<div class="card">
+								<div class="card-body">
+									<h5 class="card-title">酒店</h5>
+									<p class="card-text">@Model.ThisRoom.Hotel.Name</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-6 w-50">
+						<div class="form-group">
+							<div class="card">
+								<div class="card-body">
+									<h5 class="card-title">酒店位置</h5>
+									<p class="card-text">@Model.ThisRoom.Hotel.Location</p>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-sm-6 w-50">
+						<div class="form-group">
+							<div class="card">
+								<div class="card-body">
+									<h5 class="card-title">酒店电话</h5>
+									<p class="card-text">@Model.ThisRoom.Hotel.PhoneNumber</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col">
+		<div class="card bg-light mb-3 text-center" style="width: 100%">
+			<br/>
+			<div class="container">
+				<h3 class="card-header">检查订单信息</h3>
+				<div class="card-body">
+					<ul class="list-group list-group-flush mb-3">
+						<li class="list-group-item mb-3">原价： @Model.ThisRoom.RoomType.Price CNY</li>
+						@if (@Model.ThisRoom.Hotel.Discount != 0)
+						{
+							<li class="list-group-item mb-3 list-group-item-success">酒店折扣： @Model.ThisRoom.Hotel.Discount CNY</li>
+						}
+						else
+						{
+							<li class="list-group-item mb-3">酒店折扣： 暂无</li>
+						}
+						<li class="list-group-item mb-3 list-group-item-success">会员折扣减免： @Model.Customer.MembershipType.DiscountRate%</li>
+						<li class="list-group-item mb-5 list-group-item-success">总价： @Model.TotalPrice CNY</li>
+					</ul>
+					<div class="row justify-content-center">
+						<button type="button" class="btn btn-primary" style="width: 75%">马上预订</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

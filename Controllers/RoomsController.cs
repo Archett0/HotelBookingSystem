@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using HotelBookingSystem.Data;
 using HotelBookingSystem.Models;
 using HotelBookingSystem.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HotelBookingSystem.Controllers
 {
@@ -178,8 +179,49 @@ namespace HotelBookingSystem.Controllers
             }
 
             // Now we get all the rooms available, we have to send it back to the customer
+            var viewResultModel = new CustomerReservationViewModel
+            {
+                ResultRooms = resultRooms,
+                CheckInTime = checkInTime,
+                CheckOutTime = checkOutTime
+            };
 
-            return View("/Views/CustomerBusinesses/CustomerRoomList.cshtml", resultRooms);
+            return View("/Views/CustomerBusinesses/CustomerRoomList.cshtml", viewResultModel);
+        }
+
+        [Authorize] // 真正去订房才需要登录
+        public async Task<IActionResult> SelectedRoomDetail(int id, DateTime checkInTime, DateTime checkOutTime, string userEmail)
+        {
+            var room = await _context.Room
+                .Include(r => r.RoomType)
+                .Include(r => r.Hotel)
+                .FirstOrDefaultAsync(r => r.Id == id);
+
+            if (userEmail == null)
+                return NotFound();
+
+            var currentUser = await _context.Customer
+                .Include(c => c.MembershipType)
+                .FirstOrDefaultAsync(c => c.Email == userEmail);
+
+            if (currentUser == null)
+                return NotFound();
+
+            var originalPrice = room.RoomType.Price;
+            var hotelDiscount = room.Hotel.Discount;
+            var membershipDiscount = currentUser.MembershipType.DiscountRate / 100.0;
+            var totalPrice = Math.Round((originalPrice - hotelDiscount) * (1 - membershipDiscount), 2);
+
+            var viewModel = new CustomerReservationViewModel
+            {
+                ThisRoom = room,
+                CheckInTime = checkInTime,
+                CheckOutTime = checkOutTime,
+                Customer = currentUser,
+                TotalPrice = totalPrice
+            };
+
+            return View("/Views/CustomerBusinesses/CustomerRoomDetails.cshtml", viewModel);
         }
 
         [HttpPost]

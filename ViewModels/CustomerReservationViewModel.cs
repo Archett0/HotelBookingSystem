@@ -21,5 +21,20 @@ namespace HotelBookingSystem.ViewModels
 
         [Display(Name = "房间类型")]
         public string RoomType { get; set; }    // 搜索词
+
+        [Display(Name = "用户Id")]
+        public string UserId { get; set; }
+
+        [Display(Name = "搜索出的所有房间")]
+        public IEnumerable<Room> ResultRooms { get; set; }
+
+        [Display(Name = "选中的一个房间")]
+        public Room ThisRoom { get; set; }
+
+        [Display(Name = "当前用户")]
+        public Customer Customer { get; set; }
+
+        [Display(Name = "折算出的总价")]
+        public double TotalPrice { get; set; }
     }
 }

@@ -1,4 +1,9 @@
-﻿@model HotelBookingSystem.ViewModels.CustomerReservationViewModel
+﻿@using Microsoft.AspNetCore.Identity
+@using HotelBookingSystem.Areas.Identity.Data
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@model HotelBookingSystem.ViewModels.CustomerReservationViewModel
 @{
 	ViewData["Title"] = "CustomerIndex";
 	Layout = "~/Views/Shared/_Layout.cshtml";
@@ -41,6 +46,12 @@
 			<div class="form-group w-50">
 				@Html.LabelFor(r => r.RoomType, new { @class = "form-label mt-4"})
 				@Html.DropDownListFor(r => r.RoomType, new SelectList(Model.RoomTypes, "Name", "Name"), "全部房间类别", new { @class = "form-control" })
+			</div>
+			<div class="form-group">
+				<fieldset disabled="">
+					<label class="form-label" asp-for="UserId"></label>
+					<input class="form-control" type="text" value="@UserManager.GetUserName(User)">
+				</fieldset>
 			</div>
 			<hr/>
 			<button type="submit" class="btn btn-primary text-end">搜索</button>
