@@ -18,7 +18,6 @@ namespace HotelBookingSystem.Controllers
         public CustomersController(HotelBookingSystemContext context)
         {
             _context = context;
-            // _context.Dispose();  // 要加这句话吗？加上会报错
         }
 
         // Get: Customers

@@ -68,7 +68,7 @@ namespace HotelBookingSystem.Controllers
             {
                 Hotels = new SelectList(await hotelQuery.Distinct().ToListAsync()), // TODO:设置下拉菜单
                 RoomTypes = new SelectList(await typeQuery.Distinct().ToListAsync()),   // TODO:设置下拉菜单
-                Rooms = await rooms.ToListAsync()
+                Rooms = await rooms.OrderBy(r => r.Hotel).ThenBy(r => r.RoomType).ThenBy(r => r.Name).ToListAsync()
             };
 
             return View(roomSearchViewModel);
@@ -108,21 +108,13 @@ namespace HotelBookingSystem.Controllers
             var hotelBookingSystemContext = _context.Room
                 .Include(r => r.Hotel)
                 .Include(r => r.RoomType);
-            IEnumerable<Room> allRooms = await hotelBookingSystemContext.ToListAsync();
+            IEnumerable<Room> allRooms = await hotelBookingSystemContext.OrderBy(r => r.RoomType).ThenBy(r => r.Hotel).ToListAsync();
 
             // Select the rooms which are available and satisfies the type
             var clearRooms = new List<Room>();
-            foreach (var room in allRooms)
-            {
-                if (roomType == null)
-                {
-                    clearRooms.Add(room);
-                }
-                else if (room.RoomType.Name.Equals(roomType) && room.Status == 0)
-                {
-                    clearRooms.Add(room);
-                }
-            }
+            clearRooms.AddRange(roomType == null
+                ? allRooms.Where(room => room.Status == 0)
+                : allRooms.Where(room => room.RoomType.Name.Equals(roomType) && room.Status == 0));
 
             // Get all reservations contains the upper cleared-rooms
             var allReservations = await _context.Reservation.ToListAsync();
@@ -178,10 +170,50 @@ namespace HotelBookingSystem.Controllers
                 }
             }
 
+            var resultSingleRooms = new List<Room>();
+            if (roomType != null)
+            {
+                var hotel1Flag = false;
+                var hotel2Flag = false;
+                var hotel3Flag = false;
+                foreach (var room in resultRooms)
+                {
+                    if (room.Hotel.Name.Equals("西湖分店"))
+                    {
+                        if (hotel1Flag == false)
+                        {
+                            resultSingleRooms.Add(room);
+                            hotel1Flag = true;
+                        }
+                    }
+                    else if (room.Hotel.Name.Equals("西溪湿地分店"))
+                    {
+                        if (hotel2Flag == false)
+                        {
+                            resultSingleRooms.Add(room);
+                            hotel2Flag = true;
+                        }
+                    }
+                    else if (room.Hotel.Name.Equals("钱江新城分店"))
+                    {
+                        if (hotel3Flag == false)
+                        {
+                            resultSingleRooms.Add(room);
+                            hotel3Flag = true;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                resultSingleRooms = resultRooms;
+            }
+
+
             // Now we get all the rooms available, we have to send it back to the customer
             var viewResultModel = new CustomerReservationViewModel
             {
-                ResultRooms = resultRooms,
+                ResultRooms = resultSingleRooms,
                 CheckInTime = checkInTime,
                 CheckOutTime = checkOutTime
             };

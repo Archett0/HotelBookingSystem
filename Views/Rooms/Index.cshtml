@@ -12,26 +12,20 @@
 	<a asp-action="Create" class = "btn btn-primary">新建房间</a>
 </p>
 <form asp-controller="Rooms" asp-action="Index" method="get">
-	<div class="input-group mb-3 w-25">
-		<input type="text" class="form-control" asp-for="RoomName" placeholder="搜索房间名称" aria-label="房间名称" aria-describedby="button-addon2">
-		<button class="btn btn-primary" type="submit" id="button-addon2">搜索</button>
-	</div>
 	<div class="form-group mb-3 w-25">
 		<select class="form-select" asp-for="RoomHotel" asp-items="Model.Hotels">
 			<option value="">全部酒店</option>
 		</select>
-	</div>	
+	</div>
 	<div class="form-group mb-3 w-25">
 		<select class="form-select" asp-for="RoomType" asp-items="Model.RoomTypes">
 			<option value="">全部房型</option>
 		</select>
 	</div>
-	@* <select asp-for="RoomHotel" asp-items="Model.Hotels"> *@
-	@* 	<option value="">全部酒店</option> *@
-	@* </select> *@
-	@* <select asp-for="RoomType" asp-items="Model.RoomTypes"> *@
-	@* 	<option value="">全部房型</option> *@
-	@* </select> *@
+	<div class="input-group mb-3 w-25">
+		<input type="text" class="form-control" asp-for="RoomName" placeholder="搜索房间名称" aria-label="房间名称" aria-describedby="button-addon2">
+		<button class="btn btn-primary" type="submit" id="button-addon2">搜索</button>
+	</div>
 </form>
 @if (Model == null)
 {
@@ -45,7 +39,7 @@
 }
 else
 {
-	<table class="table table-bordered table-hover">
+	<table class="table table-bordered table-hover text-center">
 		<thead>
 		<tr>
 			<th>
@@ -63,7 +57,7 @@ else
 			<th>
 				@Html.DisplayNameFor(model => model.Rooms[0].Hotel)
 			</th>
-			<th>Available Options</th>
+			<th>可选操作</th>
 		</tr>
 		</thead>
 		<tbody>
@@ -74,7 +68,23 @@ else
 					@Html.DisplayFor(modelItem => item.Name)
 				</td>
 				<td>
-					@Html.DisplayFor(modelItem => item.Status)
+					@if (item.Status.Equals(0))
+					{
+						<span class="badge bg-success">空闲</span>
+					}
+					else if (item.Status.Equals(1))
+					{
+						<span class="badge bg-info">暂不可用</span>
+					}
+					else if (item.Status.Equals(2))
+					{
+						<span class="badge bg-warning">等待维修</span>
+					}
+					else if (item.Status.Equals(3))
+					{
+						<span class="badge bg-danger">等待检查</span>
+					}
+
 				</td>
 				<td>
 					@Html.DisplayFor(modelItem => item.Description)
@@ -86,9 +96,9 @@ else
 					@Html.DisplayFor(modelItem => item.Hotel.Name)
 				</td>
 				<td>
-					<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-					<a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-					<a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+					<a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-info">查看详情</a>
+					<a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-primary">修改</a>
+					<a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-danger">删除</a>
 				</td>
 			</tr>
 		}
