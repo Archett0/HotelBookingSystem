@@ -23,7 +23,7 @@
 }
 else
 {
-	<table class="table">
+	<table class="table text-center">
 		<thead>
 		<tr>
 			<th>
@@ -39,12 +39,14 @@ else
 				@Html.DisplayNameFor(model => model.DateCheckOut)
 			</th>
 			<th>
-				@Html.DisplayNameFor(model => model.Description)
+				@Html.DisplayNameFor(model => model.Room.Hotel)
 			</th>
 			<th>
 				@Html.DisplayNameFor(model => model.Status)
 			</th>
-			<th></th>
+			<th>
+				可选操作
+			</th>
 		</tr>
 		</thead>
 		<tbody>
@@ -63,15 +65,30 @@ else
 					@Html.DisplayFor(modelItem => item.DateCheckOut)
 				</td>
 				<td>
-					@Html.DisplayFor(modelItem => item.Description)
+					@Html.DisplayFor(modelItem => item.Room.Hotel.Name)
 				</td>
 				<td>
-					@Html.DisplayFor(modelItem => item.Status)
+					@if (item.Status.Equals(0))
+					{
+						<span class="badge bg-warning">未支付</span>
+					}
+					else if (item.Status.Equals(1))
+					{
+						<span class="badge bg-info">已支付</span>
+					}
+					else if (item.Status.Equals(2))
+					{
+						<span class="badge bg-success">进行中</span>
+					}
+					else if (item.Status.Equals(3))
+					{
+						<span class="badge bg-secondary">已完成</span>
+					}
 				</td>
 				<td>
-					<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-					<a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-					<a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+					<a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-info">查看详情</a>
+					<a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-primary">修改</a>
+					<a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-danger">删除</a>
 				</td>
 			</tr>
 		}

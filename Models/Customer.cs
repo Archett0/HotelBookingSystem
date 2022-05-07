@@ -23,9 +23,11 @@ namespace HotelBookingSystem.Models
         
         [Display(Name = "生日")]
         [Min18YearsIfAMember]   // 自定义验证第二步
+        [DataType(DataType.Date)]
         public DateTime? Birthday { get; set; } // 顾客的生日,可以不填
 
-        [Display(Name = "邮箱")] 
+        [Display(Name = "邮箱")]
+        [Required]
         public string Email { get; set; }   // 邮箱作为身份验证唯一指定
     }
 }

@@ -23,7 +23,13 @@ namespace HotelBookingSystem.Controllers
         // GET: Reservations
         public async Task<IActionResult> Index()
         {
-            var hotelBookingSystemContext = _context.Reservation.Include(r => r.Customer).Include(r => r.Room);
+            var hotelBookingSystemContext = _context.Reservation
+                .Include(r => r.Room)
+                .Include(r => r.Room.RoomType)
+                .Include(r => r.Room.Hotel)
+                .Include(r => r.Customer)
+                .Include(r => r.Customer.MembershipType);
+            
             return View(await hotelBookingSystemContext.ToListAsync());
         }
 
@@ -36,9 +42,13 @@ namespace HotelBookingSystem.Controllers
             }
 
             var reservation = await _context.Reservation
-                .Include(r => r.Customer)
-                .Include(r => r.Room)
-                .FirstOrDefaultAsync(m => m.Id == id);
+                    .Include(r => r.Room)
+                    .Include(r => r.Room.RoomType)
+                    .Include(r => r.Room.Hotel)
+                    .Include(r => r.Customer)
+                    .Include(r => r.Customer.MembershipType)
+                    .FirstOrDefaultAsync(m => m.Id == id);
+
             if (reservation == null)
             {
                 return NotFound();
@@ -209,8 +219,11 @@ namespace HotelBookingSystem.Controllers
             }
 
             var reservation = await _context.Reservation
-                .Include(r => r.Customer)
                 .Include(r => r.Room)
+                .Include(r => r.Room.RoomType)
+                .Include(r => r.Room.Hotel)
+                .Include(r => r.Customer)
+                .Include(r => r.Customer.MembershipType)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (reservation == null)
             {

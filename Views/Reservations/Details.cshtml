@@ -1,55 +1,92 @@
 ﻿@model HotelBookingSystem.Models.Reservation
 
 @{
-    ViewData["Title"] = "Details";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+	ViewData["Title"] = "Details";
+	Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
-<h1>Details</h1>
+<br/>
+<h1>详情</h1>
 
 <div>
-    <h4>Reservation</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Room)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Room.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Customer)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Customer.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DateCheckIn)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DateCheckIn)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DateCheckOut)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DateCheckOut)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Status)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Status)
-        </dd>
-    </dl>
+	<h4>预订</h4>
+	<hr />
+	<div class="card border-secondary mb-3" style="max-width: 50rem;">
+		<div class="card-body">
+			<dl class="row m-3">
+				<dt class = "col-sm-2">
+					@Html.DisplayNameFor(model => model.Room)
+				</dt>
+				<dd class = "col-sm-10">
+					@Html.DisplayFor(model => model.Room.Name)
+				</dd>
+				<dt class = "col-sm-2">
+					@Html.DisplayNameFor(model => model.Customer)
+				</dt>
+				<dd class = "col-sm-10">
+					@Html.DisplayFor(model => model.Customer.Name)
+				</dd>
+				<dt class = "col-sm-2">
+					@Html.DisplayNameFor(model => model.DateCheckIn)
+				</dt>
+				<dd class = "col-sm-10">
+					@Html.DisplayFor(model => model.DateCheckIn)
+				</dd>
+				<dt class = "col-sm-2">
+					@Html.DisplayNameFor(model => model.DateCheckOut)
+				</dt>
+				<dd class = "col-sm-10">
+					@Html.DisplayFor(model => model.DateCheckOut)
+				</dd>
+				<dt class = "col-sm-2">
+					@Html.DisplayNameFor(model => model.Description)
+				</dt>
+				<dd class = "col-sm-10">
+					@Html.DisplayFor(model => model.Description)
+				</dd>
+				<dt class = "col-sm-2">
+					@Html.DisplayNameFor(model => model.Room.Hotel)
+				</dt>
+				<dd class = "col-sm-10">
+					@Html.DisplayFor(model => model.Room.Hotel.Name)
+				</dd>
+				<dt class = "col-sm-2">
+					@Html.DisplayNameFor(model => model.Room.RoomType)
+				</dt>
+				<dd class = "col-sm-10">
+					@Html.DisplayFor(model => model.Room.RoomType.Name)
+				</dd>
+				<dt class = "col-sm-2">
+					@Html.DisplayNameFor(model => model.Room.Hotel.PhoneNumber)
+				</dt>
+				<dd class = "col-sm-10">
+					@Html.DisplayFor(model => model.Room.Hotel.PhoneNumber)
+				</dd>
+				<dt class = "col-sm-2">
+					@Html.DisplayNameFor(model => model.Status)
+				</dt>
+				<dd class = "col-sm-10">
+					@if (Model.Status.Equals(0))
+					{
+						<span class="badge bg-warning">未支付</span>
+					}
+					else if (Model.Status.Equals(1))
+					{
+						<span class="badge bg-info">已支付</span>
+					}
+					else if (Model.Status.Equals(2))
+					{
+						<span class="badge bg-success">进行中</span>
+					}
+					else if (Model.Status.Equals(3))
+					{
+						<span class="badge bg-secondary">已完成</span>
+					}
+				</dd>
+			</dl>
+		</div>
+	</div>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+	<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-primary">修改预订信息</a> |
+	<a asp-action="Index" class="btn btn-info">返回预订列表页</a>
 </div>

@@ -23,10 +23,12 @@ namespace HotelBookingSystem.Models
 
         [Required]
         [Display(Name = "入住日期")]
+        [DataType(DataType.Date)]
         public DateTime DateCheckIn { get; set; } // 入住日期
 
         [Required]
         [Display(Name = "退房日期")]
+        [DataType(DataType.Date)]
         public DateTime DateCheckOut { get; set; } // 退房日期
 
         [Display(Name = "预订描述")]

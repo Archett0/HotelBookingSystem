@@ -13,14 +13,16 @@ namespace HotelBookingSystem.Models
         [Display(Name = "酒店描述")]
         public string Description { get; set; }
 
+        [Required]
         [Display(Name = "酒店位置")]
         public string Location { get; set; }
 
+        [Required]
         [Display(Name = "酒店电话")]
         public string PhoneNumber { get; set; }
 
         [Required]
-        [Display(Name = "酒店当前折扣")]
+        [Display(Name = "酒店优惠金额")]
         public double Discount { get; set; }
     }
 }
