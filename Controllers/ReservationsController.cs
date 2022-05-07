@@ -191,7 +191,7 @@ namespace HotelBookingSystem.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,RoomId,CustomerId,DateCheckIn,DateCheckOut,Description,Status")] Reservation reservation)
+        public async Task<IActionResult> Create([Bind("Id,RoomId,CustomerId,DateCheckIn,DateCheckOut,Description,Status,TotalPrice")] Reservation reservation)
         {
             if (ModelState.IsValid)
             {
@@ -219,6 +219,8 @@ namespace HotelBookingSystem.Controllers
             }
             ViewData["CustomerId"] = new SelectList(_context.Customer, "Id", "Name", reservation.CustomerId);
             ViewData["RoomId"] = new SelectList(_context.Room, "Id", "Name", reservation.RoomId);
+
+            Console.WriteLine("Executed edit method 1");
             return View(reservation);
         }
 
@@ -227,7 +229,7 @@ namespace HotelBookingSystem.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,RoomId,CustomerId,DateCheckIn,DateCheckOut,Description,Status")] Reservation reservation)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,RoomId,CustomerId,DateCheckIn,DateCheckOut,Description,Status,TotalPrice")] Reservation reservation)
         {
             if (id != reservation.Id)
             {
@@ -252,6 +254,7 @@ namespace HotelBookingSystem.Controllers
                         throw;
                     }
                 }
+                Console.WriteLine("Executed edit method 2");
                 return RedirectToAction(nameof(Index));
             }
             ViewData["CustomerId"] = new SelectList(_context.Customer, "Id", "Name", reservation.CustomerId);
