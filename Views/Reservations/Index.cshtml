@@ -1,4 +1,5 @@
-﻿@model IEnumerable<HotelBookingSystem.Models.Reservation>
+﻿@* @model IEnumerable<HotelBookingSystem.Models.Reservation> *@
+@model HotelBookingSystem.ViewModels.AdminReservationFormViewModel
 
 @{
 	ViewData["Title"] = "Index";
@@ -10,7 +11,34 @@
 <p>
 	<a asp-action="Create" class = "btn btn-primary">新建预约</a>
 </p>
-@if (!Model.Any())
+<form asp-controller="Reservations" asp-action="Index" method="get">
+	<div class="form-group mb-3 w-25">
+		<select class="form-select" asp-for="RoomType" asp-items="Model.RoomTypes">
+			<option value="">全部房型</option>
+		</select>
+	</div>
+	<div class="form-group mb-3 w-25">
+		<select class="form-select" asp-for="RoomHotel" asp-items="Model.RoomHotels">
+			<option value="">全部酒店</option>
+		</select>
+	</div>
+	<div class="form-group mb-3 w-25">
+		@* <select class="form-select" asp-for="ReservationStatus" asp-items="Model.ReservationStatuses"> *@
+		@* 	<option value="10">全部状态</option> *@
+		@* </select> *@
+		<select class="form-select" asp-for="ReservationStatus">
+			<option value="0">全部状态</option>
+			<option value="1">未支付</option>
+			<option value="2">已支付</option>
+			<option value="3">进行中</option>
+			<option value="4">已完成</option>
+		</select>
+	</div>
+	<div class="input-group mb-3 w-25">
+		<button class="btn btn-primary" type="submit">筛选</button>
+	</div>
+</form>
+@if (Model.Reservations.Count == 0)
 {
 	<div class="card border-info mb-3" style="width: 50%">
 	@* <div class="card border-info mb-3" style="max-width: 20rem;"> *@
@@ -27,22 +55,22 @@ else
 		<thead>
 		<tr>
 			<th>
-				@Html.DisplayNameFor(model => model.Room)
+				@Html.DisplayNameFor(model => model.Reservations[0].Room)
 			</th>
 			<th>
-				@Html.DisplayNameFor(model => model.Customer)
+				@Html.DisplayNameFor(model => model.Reservations[0].Customer)
 			</th>
 			<th>
-				@Html.DisplayNameFor(model => model.DateCheckIn)
+				@Html.DisplayNameFor(model => model.Reservations[0].DateCheckIn)
 			</th>
 			<th>
-				@Html.DisplayNameFor(model => model.DateCheckOut)
+				@Html.DisplayNameFor(model => model.Reservations[0].DateCheckOut)
 			</th>
 			<th>
-				@Html.DisplayNameFor(model => model.Room.Hotel)
+				@Html.DisplayNameFor(model => model.Reservations[0].Room.Hotel)
 			</th>
 			<th>
-				@Html.DisplayNameFor(model => model.Status)
+				@Html.DisplayNameFor(model => model.Reservations[0].Status)
 			</th>
 			<th>
 				可选操作
@@ -50,7 +78,7 @@ else
 		</tr>
 		</thead>
 		<tbody>
-		@foreach (var item in Model) {
+		@foreach (var item in Model.Reservations) {
 			<tr>
 				<td>
 					@Html.DisplayFor(modelItem => item.Room.Name)

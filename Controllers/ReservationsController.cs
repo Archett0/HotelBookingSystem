@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using HotelBookingSystem.Data;
 using HotelBookingSystem.Models;
+using HotelBookingSystem.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 
 namespace HotelBookingSystem.Controllers
@@ -20,8 +21,21 @@ namespace HotelBookingSystem.Controllers
             _context = context;
         }
 
+        // // GET: Reservations
+        // public async Task<IActionResult> Index()
+        // {
+        //     var hotelBookingSystemContext = _context.Reservation
+        //         .Include(r => r.Room)
+        //         .Include(r => r.Room.RoomType)
+        //         .Include(r => r.Room.Hotel)
+        //         .Include(r => r.Customer)
+        //         .Include(r => r.Customer.MembershipType);
+        //     
+        //     return View(await hotelBookingSystemContext.ToListAsync());
+        // }
+
         // GET: Reservations
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string roomType, string roomHotel, byte reservationStatus)
         {
             var hotelBookingSystemContext = _context.Reservation
                 .Include(r => r.Room)
@@ -29,8 +43,43 @@ namespace HotelBookingSystem.Controllers
                 .Include(r => r.Room.Hotel)
                 .Include(r => r.Customer)
                 .Include(r => r.Customer.MembershipType);
-            
-            return View(await hotelBookingSystemContext.ToListAsync());
+
+            IQueryable<string> typeQueryable = 
+                from r in hotelBookingSystemContext orderby r.Room.RoomType.Id select r.Room.RoomType.Name;
+
+            IQueryable<string> hotelQueryable = 
+                from r in hotelBookingSystemContext orderby r.Room.Hotel select r.Room.Hotel.Name;
+
+            IQueryable<byte> statusQueryable =
+                from r in hotelBookingSystemContext orderby r.Status select r.Status;
+
+            var reservations = from reservation in hotelBookingSystemContext select reservation;
+
+            if (!String.IsNullOrEmpty(roomType))
+            {
+                reservations = reservations.Where(r => r.Room.RoomType.Name == roomType);
+            }
+
+            if (!String.IsNullOrEmpty(roomHotel))
+            {
+                reservations = reservations.Where(r => r.Room.Hotel.Name == roomHotel);
+            }
+
+            if (!reservationStatus.Equals(0))
+            {
+                reservations = reservations.Where(r => r.Status == (reservationStatus - 1));
+            }
+
+            var viewModel = new AdminReservationFormViewModel
+            {
+                RoomTypes = new SelectList(await typeQueryable.Distinct().ToListAsync()),
+                RoomHotels = new SelectList(await hotelQueryable.Distinct().ToListAsync()),
+                ReservationStatuses = new SelectList(await statusQueryable.Distinct().ToListAsync()),
+                Reservations = await reservations.OrderBy(r => r.Room).ThenBy(r => r.DateCheckIn)
+                    .ThenBy(r => r.Customer).ToListAsync()
+            };
+
+            return View(viewModel);
         }
 
         // GET: Reservations/Details/5

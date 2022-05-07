@@ -49,6 +49,11 @@
 				</select>
 				<span asp-validation-for="Status" class="text-danger"></span>
 			</div>
+			@Html.HiddenFor(r => r.RoomId)
+			@Html.HiddenFor(r => r.CustomerId)
+			@Html.HiddenFor(r => r.DateCheckIn)
+			@Html.HiddenFor(r => r.DateCheckOut)
+			@Html.HiddenFor(r => r.Description)
 			<div class="form-group m-3">
 				<input type="submit" value="修改" class="btn btn-warning" />
 				<a asp-action="Index" class="btn btn-outline-info">返回预订列表页</a>

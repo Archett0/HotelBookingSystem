@@ -27,7 +27,7 @@
 		<button class="btn btn-primary" type="submit" id="button-addon2">搜索</button>
 	</div>
 </form>
-@if (Model == null)
+@if (Model.Rooms.Count == 0)
 {
 	<div class="card border-info mb-3" style="width: 50%">
 		<div class="card-header">系统提示信息</div>
