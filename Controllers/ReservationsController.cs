@@ -194,7 +194,7 @@ namespace HotelBookingSystem.Controllers
             return View("/Views/CustomerBusinesses/CustomerReservations.cshtml", userReservations);
         }
 
-        // TODO:完成这个下订单模块
+        // POST: Reservations/CustomerNewReservation 下订单模块
         public async Task<IActionResult> CustomerNewReservation(int roomId, DateTime checkInTime,
             DateTime checkOutTime, int userId, double totalPrice)
         {
@@ -214,7 +214,7 @@ namespace HotelBookingSystem.Controllers
                                          + " 预定了 " + targetRoom.Name
                                          + "，时段为 " + newReservation.DateCheckIn.ToShortDateString()
                                          + "-" + newReservation.DateCheckOut.ToShortDateString()
-                                         + "，订单金额为 " + newReservation.TotalPrice;
+                                         + "，订单金额为 " + newReservation.TotalPrice + ";";
             Console.WriteLine(descriptionString);
             newReservation.Description = descriptionString;
             newReservation.Status = 0;
@@ -250,6 +250,49 @@ namespace HotelBookingSystem.Controllers
             ViewData["CustomerId"] = new SelectList(_context.Customer, "Id", "Name", reservation.CustomerId);
             ViewData["RoomId"] = new SelectList(_context.Room, "Id", "Name", reservation.RoomId);
             return View(reservation);
+        }
+
+        // GET: Reservations/Pay
+        public async Task<IActionResult> CustomerPayReservation(int reservationId)
+        {
+            var targetReservation = await _context.Reservation
+                .Where(r => r.Id.Equals(reservationId))
+                .Include(r => r.Customer)
+                .SingleOrDefaultAsync();
+
+            if (targetReservation == null)
+            {
+                NotFound();
+            }
+            else
+            {
+                targetReservation.Status++;
+                Console.WriteLine("Order{0} 's status has changed from {1} to {2}", targetReservation.Id,
+                    targetReservation.Status - 1, targetReservation.Status);
+                targetReservation.Description +=
+                    Environment.NewLine +
+                    "顾客 " + targetReservation.Customer.Name +
+                    " 在" + DateTime.Now +
+                    " 支付了订单;";
+                var targetUser = targetReservation.Customer.Email;
+                try
+                {
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!ReservationExists(targetReservation.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(CustomerAllReservations), new { userEmail = targetUser });
+            }
+            return NotFound();
         }
 
         // GET: Reservations/Edit/5
