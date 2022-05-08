@@ -10,6 +10,7 @@
 	@* <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" /> *@
 	<link rel="stylesheet" href="~/css/site.css" />
 	<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="~/css/fullcalendar.min.css"/>
 </head>
 <body>
 	@await Html.PartialAsync("_NavBar")	@*使用部分View来渲染页面,使得代码的可移植性更强*@
@@ -28,6 +29,8 @@
 	<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
 	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 	<script src="~/js/site.js" asp-append-version="true"></script>
+	<script src="~/js/fullcalendar.min.js"></script>
+	<script src="~/js/moment.min.js"></script>
 	@await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

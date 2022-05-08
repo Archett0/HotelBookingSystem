@@ -9,6 +9,7 @@ using HotelBookingSystem.Data;
 using HotelBookingSystem.Models;
 using HotelBookingSystem.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using Newtonsoft.Json;
 
 namespace HotelBookingSystem.Controllers
 {
@@ -33,6 +34,53 @@ namespace HotelBookingSystem.Controllers
         //     
         //     return View(await hotelBookingSystemContext.ToListAsync());
         // }
+
+        // GET: SchedulerCalendar
+        public async Task<IActionResult> SchedulerCalendar()
+        {
+            var hotelBookingSystemContext = _context.Reservation
+                .Include(r => r.Room)
+                .Include(r => r.Room.RoomType)
+                .Include(r => r.Room.Hotel)
+                .Include(r => r.Customer)
+                .Include(r => r.Customer.MembershipType);
+
+            var reservations = from reservation in hotelBookingSystemContext select reservation;
+            var reservationsList = await reservations.ToListAsync();
+            var viewModel = new List<ReservationCalenderViewModel>();
+
+            foreach (var reservation in reservationsList)
+            {
+                var backgroundColor = "";
+                if (reservation.Room.Hotel.Name.Equals("西湖分店"))
+                {
+                    backgroundColor = "#1E90FF";
+                }
+                else if (reservation.Room.Hotel.Name.Equals("西溪湿地分店"))
+                {
+                    backgroundColor = "#00CD66";
+                }
+                else if (reservation.Room.Hotel.Name.Equals("钱江新城分店"))
+                {
+                    backgroundColor = "#FF6A6A";
+                }
+
+                viewModel.Add(new ReservationCalenderViewModel(
+                    reservation.Id.ToString(),
+                    reservation.Room.Name,
+                    reservation.DateCheckIn.ToShortDateString(),
+                    reservation.DateCheckOut.AddDays(1).ToShortDateString(),
+                    "https://localhost:44308/Reservations/Details/"+reservation.Id,
+                    backgroundColor));
+            }
+
+            var reservationListJson = JsonConvert.SerializeObject(viewModel);
+            Console.WriteLine(reservationListJson);
+
+            ViewData["Reservations"] = reservationListJson;
+            return View();
+
+        }
 
         // GET: Reservations
         public async Task<IActionResult> Index(string roomType, string roomHotel, byte reservationStatus)

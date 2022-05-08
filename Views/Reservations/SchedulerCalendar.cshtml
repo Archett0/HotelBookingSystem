@@ -1,0 +1,42 @@
+﻿
+@{
+	ViewData["Title"] = "SchedulerCalendar";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<br/>
+<h2>房间预约日程总表</h2>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.0.1/fullcalendar.min.css"/>
+<div id="calendar"></div>
+
+@section Scripts
+{
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	<script src="https://fullcalendar.io/js/fullcalendar-2.2.5/fullcalendar.min.js"></script>
+
+	<script>
+		$(document).ready(function() {
+			var dataWithError = "@ViewData["Reservations"]";
+			console.log("dataWithError: " + dataWithError);
+			var dataAfterReplace = dataWithError.replace(new RegExp("&quot;", "gm"), "\"");
+			console.log("dataAfterReplace: " + dataAfterReplace);
+			var reservationLists = $.parseJSON(dataAfterReplace);
+			console.log("Json after convert: " + reservationLists);
+
+			$('#calendar').fullCalendar({
+				header: {
+					left: 'prev,next today',
+					center: 'title',
+					right: 'month,agendaWeek,agendaDay,agenda'
+				},
+				themeSystem: 'bootstrap5',
+				locale: 'zh-cn',
+				defaultDate: '2022-5-9',
+				defaultView: 'month',
+				editable: false,
+				timezone: "local",
+				events: reservationLists
+			});
+		});
+	</script>
+}
