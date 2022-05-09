@@ -6,8 +6,9 @@ using HotelBookingSystem.Areas.Identity.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using HotelBookingSystem.Models;
 
-namespace HotelBookingSystem.Data
+namespace HotelBookingSystem.Areas.Identity.Data
 {
     public class AuthDbContext : IdentityDbContext<ApplicationUser>
     {
@@ -23,5 +24,7 @@ namespace HotelBookingSystem.Data
             // For example, you can rename the ASP.NET Identity table names and more.
             // Add your customizations after calling base.OnModelCreating(builder);
         }
+
+        public DbSet<HotelBookingSystem.Models.ProjectRole> ProjectRole { get; set; }
     }
 }

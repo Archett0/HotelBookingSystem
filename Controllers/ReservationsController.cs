@@ -13,6 +13,7 @@ using Newtonsoft.Json;
 
 namespace HotelBookingSystem.Controllers
 {
+    [Authorize(Roles = "Admin, User")]
     public class ReservationsController : Controller
     {
         private readonly HotelBookingSystemContext _context;
@@ -35,6 +36,7 @@ namespace HotelBookingSystem.Controllers
         //     return View(await hotelBookingSystemContext.ToListAsync());
         // }
 
+        [Authorize(Roles = "Admin")]
         // GET: SchedulerCalendar
         public async Task<IActionResult> SchedulerCalendar()
         {
@@ -82,6 +84,7 @@ namespace HotelBookingSystem.Controllers
 
         }
 
+        [Authorize(Roles = "Admin")]
         // GET: Reservations
         public async Task<IActionResult> Index(string roomType, string roomHotel, byte reservationStatus)
         {
@@ -130,6 +133,7 @@ namespace HotelBookingSystem.Controllers
             return View(viewModel);
         }
 
+        [Authorize(Roles = "Admin")]
         // GET: Reservations/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -154,7 +158,7 @@ namespace HotelBookingSystem.Controllers
             return View(reservation);
         }
 
-        [Authorize]
+        [Authorize(Roles = "User, Admin")]
         public async Task<IActionResult> CustomerAllReservations(string userEmail)
         {
             var reservationsContext = _context.Reservation
@@ -173,6 +177,7 @@ namespace HotelBookingSystem.Controllers
             return View("/Views/CustomerBusinesses/CustomerReservations.cshtml", userReservations);
         }
 
+        [Authorize(Roles = "User")]
         public async Task<IActionResult> ReservationsFilter(string userEmail, byte filterMethod)
         {
             var reservationsContext = _context.Reservation
@@ -194,6 +199,7 @@ namespace HotelBookingSystem.Controllers
             return View("/Views/CustomerBusinesses/CustomerReservations.cshtml", userReservations);
         }
 
+        [Authorize(Roles = "User")]
         // POST: Reservations/CustomerNewReservation 下订单模块
         public async Task<IActionResult> CustomerNewReservation(int roomId, DateTime checkInTime,
             DateTime checkOutTime, int userId, double totalPrice)
@@ -226,6 +232,7 @@ namespace HotelBookingSystem.Controllers
             return RedirectToAction(nameof(CustomerAllReservations),new { userEmail = targetUser.Email});
         }
 
+        [Authorize(Roles = "Admin")]
         // GET: Reservations/Create
         public IActionResult Create()
         {
@@ -239,6 +246,7 @@ namespace HotelBookingSystem.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create([Bind("Id,RoomId,CustomerId,DateCheckIn,DateCheckOut,Description,Status,TotalPrice")] Reservation reservation)
         {
             if (ModelState.IsValid)
@@ -252,6 +260,7 @@ namespace HotelBookingSystem.Controllers
             return View(reservation);
         }
 
+        [Authorize(Roles = "User")]
         // GET: Reservations/Pay
         public async Task<IActionResult> CustomerPayReservation(int reservationId)
         {
@@ -295,6 +304,7 @@ namespace HotelBookingSystem.Controllers
             return NotFound();
         }
 
+        [Authorize(Roles = "Admin")]
         // GET: Reservations/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -320,6 +330,7 @@ namespace HotelBookingSystem.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,RoomId,CustomerId,DateCheckIn,DateCheckOut,Description,Status,TotalPrice")] Reservation reservation)
         {
             if (id != reservation.Id)
@@ -354,6 +365,7 @@ namespace HotelBookingSystem.Controllers
         }
 
         // GET: Reservations/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -379,6 +391,7 @@ namespace HotelBookingSystem.Controllers
         // POST: Reservations/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var reservation = await _context.Reservation.FindAsync(id);

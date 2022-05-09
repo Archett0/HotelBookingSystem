@@ -130,6 +130,7 @@ namespace HotelBookingSystem.Areas.Identity.Pages.Account
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
+                    _userManager.AddToRoleAsync(user, "User").Wait();   // 给予顾客权限
                     _customerContext.Customer.Add(customer);    // 如果用户成功注册，则添加这个customer
                     await _customerContext.SaveChangesAsync();
                     _logger.LogInformation("User created a new account with password.");

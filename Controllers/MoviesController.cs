@@ -8,9 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using HotelBookingSystem.Data;
 using HotelBookingSystem.Models;
 using HotelBookingSystem.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HotelBookingSystem.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class MoviesController : Controller
     {
         private readonly HotelBookingSystemContext _context;

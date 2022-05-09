@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
@@ -26,6 +27,7 @@ namespace HotelBookingSystem.Areas.Identity.Data
         
         public byte MembershipTypeId { get; set; }  //会员类型Id
 
+        [DataType(DataType.Date)]
         public DateTime Birthday { get; set; } // 顾客的生日
 
     }

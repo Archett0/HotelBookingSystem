@@ -8,7 +8,7 @@
 <h1>注册</h1>
 <h4>创建新会员</h4>
 <hr/>
-<div class="row">
+<div class="row table-special-background">
 	<form asp-route-returnUrl="@Model.ReturnUrl" method="post">
 		@* <div asp-validation-summary="All" class="text-danger"></div> *@
 		<div class="row g-3">
@@ -38,7 +38,7 @@
 			<div class="col col-md-4">
 				<div class="form-group">
 					@Html.LabelFor(m => m.Input.Birthday, new { @class = "form-label mt-4"})
-					<input asp-for="Input.Birthday" class="form-control" />
+					<input asp-for="Input.Birthday" class="form-control" type="Date" />
 					@Html.ValidationMessageFor(m => m.Input.Birthday)
 				</div>
 			</div>
@@ -83,6 +83,8 @@
 		</div>
 		@Html.Hidden("Input.IsAdmin",false)
 		<button type="submit" class="btn btn-primary mt-4">注册</button>
+		<br/>
+		<br/>
 	</form>
 </div>
 

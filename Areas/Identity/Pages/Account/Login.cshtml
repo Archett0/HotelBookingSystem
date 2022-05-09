@@ -7,27 +7,28 @@
 }
 <br/>
 <h1>登录</h1>
-<div class="row">
+<div class="row table-special-background">
 	<div class="col-md-4">
 		<section>
 			<form id="account" method="post">
+				<br/>
 				<h4>用本站账号登录</h4>
-				<hr />
+				<hr/>
 				<div asp-validation-summary="All" class="text-danger"></div>
 				<div class="form-group">
 					<label asp-for="Input.Email" class="mt-4"></label>
-					<input asp-for="Input.Email" class="form-control" />
+					<input asp-for="Input.Email" class="form-control"/>
 					<span asp-validation-for="Input.Email" class="text-danger"></span>
 				</div>
 				<div class="form-group">
 					<label asp-for="Input.Password" class="mt-4"></label>
-					<input asp-for="Input.Password" class="form-control" />
+					<input asp-for="Input.Password" class="form-control"/>
 					<span asp-validation-for="Input.Password" class="text-danger"></span>
 				</div>
 				<div class="form-group">
 					<div class="checkbox">
 						<label asp-for="Input.RememberMe" class="mt-4">
-							<input asp-for="Input.RememberMe" class="form-check-input" />
+							<input asp-for="Input.RememberMe" class="form-check-input"/>
 							@Html.DisplayNameFor(m => m.Input.RememberMe)
 						</label>
 					</div>
@@ -45,14 +46,16 @@
 					<p>
 						<a id="resend-confirmation" asp-page="./ResendEmailConfirmation">重发确认邮件</a>
 					</p>
+					<br/>
 				</div>
 			</form>
 		</section>
 	</div>
 	<div class="col-md-6 col-md-offset-2">
 		<section>
+			<br/>
 			<h4>换个方法登录</h4>
-			<hr />
+			<hr/>
 			@{
 				if ((Model.ExternalLogins?.Count ?? 0) == 0)
 				{

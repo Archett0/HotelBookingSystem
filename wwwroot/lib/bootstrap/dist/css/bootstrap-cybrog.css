@@ -89,7 +89,6 @@ body {
     background-color: var(--bs-body-bg);
     -webkit-text-size-adjust: 100%;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-    /* background: url("/lib/hotelbackground.jpg"); */
 }
 
 hr {
@@ -7518,7 +7517,7 @@ fieldset:disabled .btn {
 }
 
 .border-primary {
-  border-color: #2a9fd6 !important;
+    border-color: #2a9fd6 !important;
 }
 
 .border-secondary {

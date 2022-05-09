@@ -8,8 +8,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using HotelBookingSystem.Areas.Identity.Data;
 using Microsoft.EntityFrameworkCore;
 using HotelBookingSystem.Data;
+using Microsoft.AspNetCore.Identity;
 
 namespace HotelBookingSystem
 {
@@ -27,8 +29,23 @@ namespace HotelBookingSystem
         {
             services.AddControllersWithViews();
 
+            // DbContexts
             services.AddDbContext<HotelBookingSystemContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("HotelBookingSystemContext")));
+            services.AddDbContext<AuthDbContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("AuthDbContextConnection")));
+
+            // Identity
+            services.AddDefaultIdentity<ApplicationUser>(options =>
+                {
+                    options.SignIn.RequireConfirmedAccount = false; // true改为了false
+                    options.Password.RequireLowercase = false;
+                    options.Password.RequireUppercase = false;
+                    options.Password.RequireNonAlphanumeric = false;
+                })
+                .AddRoles<IdentityRole>()   // 添加角色服务到 Identity
+                .AddEntityFrameworkStores<AuthDbContext>();
+
             services.AddRazorPages();   // Added while deploying Identity Authentication
         }
 

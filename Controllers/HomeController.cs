@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace HotelBookingSystem.Controllers
 {
-    [Authorize] // 启用身份控制
+    // 不启用身份控制,对匿名用户也显示主页
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;

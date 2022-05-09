@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace HotelBookingSystem.Controllers
 {
+    [Authorize(Roles = "Admin, User")]
     public class RoomsController : Controller   // TODO:正修改此控制器来添加搜索服务
     {
         private readonly HotelBookingSystemContext _context;
@@ -34,6 +35,7 @@ namespace HotelBookingSystem.Controllers
         // }
 
         // GET: Rooms (Advanced methods)    // TODO: 注意这里筛选功能的写法！
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index(string roomType, string roomHotel, string roomName)
         {
             var hotelBookingSystemContext = _context.Room
@@ -74,7 +76,7 @@ namespace HotelBookingSystem.Controllers
             return View(roomSearchViewModel);
         }
 
-
+        [AllowAnonymous]
         [HttpGet]   // 这个方法用来给用户主页面提供数据
         public async Task<IActionResult> DirectToCustomerIndex()
         {
@@ -88,6 +90,7 @@ namespace HotelBookingSystem.Controllers
             return View("/Views/CustomerBusinesses/CustomerIndex.cshtml", viewModel);
         }
 
+        [AllowAnonymous]
         [HttpGet]   // 这个方法用来根据用户输入查询房间
         public async Task<IActionResult> RoomSearch(string roomType, DateTime checkInTime, DateTime checkOutTime)
         {
@@ -221,7 +224,7 @@ namespace HotelBookingSystem.Controllers
             return View("/Views/CustomerBusinesses/CustomerRoomList.cshtml", viewResultModel);
         }
 
-        [Authorize] // 真正去订房才需要登录
+        // 真正去订房才需要登录
         public async Task<IActionResult> SelectedRoomDetail(int id, DateTime checkInTime, DateTime checkOutTime, string userEmail)
         {
             var room = await _context.Room
@@ -256,13 +259,8 @@ namespace HotelBookingSystem.Controllers
             return View("/Views/CustomerBusinesses/CustomerRoomDetails.cshtml", viewModel);
         }
 
-        [HttpPost]
-        public string Index(string searchString, bool notUsed)
-        {
-            return "From [HttpPost]Index: filter on " + searchString;
-        }
-
         // GET: Rooms/Details/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -283,6 +281,7 @@ namespace HotelBookingSystem.Controllers
         }
 
         // GET: Rooms/Create
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             ViewData["HotelId"] = new SelectList(_context.Hotel, "Id", "Name");
@@ -295,6 +294,7 @@ namespace HotelBookingSystem.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create([Bind("Id,Name,Status,Description,RoomTypeId,HotelId")] Room room)
         {
             if (ModelState.IsValid)
@@ -309,6 +309,7 @@ namespace HotelBookingSystem.Controllers
         }
 
         // GET: Rooms/Edit/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -331,6 +332,7 @@ namespace HotelBookingSystem.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Status,Description,RoomTypeId,HotelId")] Room room)
         {
             if (id != room.Id)
@@ -364,6 +366,7 @@ namespace HotelBookingSystem.Controllers
         }
 
         // GET: Rooms/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -386,6 +389,7 @@ namespace HotelBookingSystem.Controllers
         // POST: Rooms/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var room = await _context.Room.FindAsync(id);

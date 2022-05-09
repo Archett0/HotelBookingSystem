@@ -1,0 +1,29 @@
+﻿
+@model ProjectRole
+@{
+	ViewData["Title"] = "Create New Role";
+	// Layout = "_AuthLayout"; 
+}
+<br/>
+<h1>Create</h1>
+
+<h4>ProjectRole</h4>
+<hr/>
+<div class="row">
+	<form method="post" asp-action="Create">
+		<div class="row g-3">
+			<div class="col col-md-4">
+				<div class="form-group">
+					<label asp-for="RoleName" class="form-label mt-4"></label>
+					<input asp-for="RoleName" class="form-control"/>
+					<span asp-validation-for="RoleName" class="text-danger"></span>
+				</div>
+			</div>
+		</div>
+		<button type="submit" class="btn btn-primary mt-4">Create Role</button>
+	</form>
+</div>
+
+@section Scripts {
+	<partial name="_ValidationScriptsPartial" />
+}

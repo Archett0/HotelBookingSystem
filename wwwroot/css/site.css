@@ -83,6 +83,24 @@ body {
 
 /* Customer page back ground */
 .customer-background {
-    background: url("/lib/hotelbackground.jpg") no-repeat;
+    background: url("/lib/goodbackground.jpg") fixed;
+    /* background: url("/lib/hotelbackground.jpg") no-repeat; */
     background-size: cover;
+    opacity: 0.9;
+}
+
+/* 主页面Home的卡片设置 */
+.special-cards-background {
+    opacity: 0.9;
+}
+
+.border-noborder-slight-background {
+    border-color: rgba(220, 220, 220, 0) !important;
+    /* border-color: #2a9fd6 !important; */
+    background: rgba(220, 220, 220, 0.1);
+}
+
+/* 表格的背景设置 */
+.table-special-background {
+    background: rgba(0, 0, 0, 0.9)
 }

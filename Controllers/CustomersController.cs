@@ -7,10 +7,12 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using HotelBookingSystem.Data;
 using HotelBookingSystem.Models;
 using HotelBookingSystem.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 
 namespace HotelBookingSystem.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class CustomersController : Controller
     {
         private readonly HotelBookingSystemContext _context;
