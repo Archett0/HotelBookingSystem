@@ -1,0 +1,27 @@
+﻿@page
+@model PersonalDataModel
+@{
+    ViewData["Title"] = "Personal Data";
+    ViewData["ActivePage"] = ManageNavPages.PersonalData;
+}
+
+<h4>个人数据</h4>
+
+<div class="row">
+    <div class="col-md-6">
+        <p>您的账户保存有您授予我们权限的关于您的隐私信息。您可以在这个页面下载或者删除您的个人数据。</p>
+        <p>
+            <strong>请注意：删除您的个人数据同时也会删除您的账户，且此操作不可撤销！</strong>
+        </p>
+        <form id="download-data" asp-page="DownloadPersonalData" method="post" class="form-group">
+            <button class="btn btn-primary mt-2" type="submit">下载</button>
+        </form>
+        <p>
+            <a id="delete" asp-page="DeletePersonalData" class="btn btn-danger mt-2">删除</a>
+        </p>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
