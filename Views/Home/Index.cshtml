@@ -15,12 +15,29 @@
 			<div class="card-text">
 				@if (SignInManager.IsSignedIn(User))
 				{
-					<br/>
-					<h5>欢迎您！@UserManager.GetUserName(User)</h5>
-					<br/>
-					<h4> 看看我们的可用房源 
-						<a class="btn btn-primary" asp-area="" asp-controller="Rooms" asp-action="DirectToCustomerIndex">去预定</a>
-					</h4>
+					@if (User.IsInRole("User"))
+					{
+						<br/>
+						<h5>欢迎您！@UserManager.GetUserName(User)</h5>
+						<br/>
+						<h4> 看看我们的可用房源
+							<a class="btn btn-primary" asp-area="" asp-controller="Rooms" asp-action="DirectToCustomerIndex">去预定</a>
+						</h4>
+					}
+					@if (User.IsInRole("Admin"))
+					{
+						<br/>
+						<h5>欢迎登录，@UserManager.GetUserName(User)管理员</h5>
+						<br/>
+						<h4> 接下来干什么？
+							<a class="btn btn-primary" asp-area="" asp-controller="Rooms" asp-action="Index">查看房间</a>
+							或是 
+							<a class="btn btn-primary" asp-area="" asp-controller="Reservations" asp-action="Index">管理预订</a>
+							？
+						</h4>
+						<br/>
+						<h5>更多操作请查看导航栏</h5>
+					}
 				}
 				else
 				{

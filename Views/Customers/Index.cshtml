@@ -1,4 +1,5 @@
-﻿@model IEnumerable<HotelBookingSystem.Models.Customer>
+﻿@* @model IEnumerable<HotelBookingSystem.Models.Customer> *@
+@model HotelBookingSystem.ViewModels.CustomerListViewModel
 
 @{
 	ViewData["Title"] = "Index";
@@ -10,73 +11,105 @@
 @* <p> *@
 @* 	<a asp-action="Create" class = "btn btn-primary">新建顾客</a> *@
 @* </p> *@
-<table class="table text-center table-special-background">
-	<thead>
-	<tr>
-		<th>
-			@Html.DisplayNameFor(model => model.Name)
-		</th>
-		<th>
-			@Html.DisplayNameFor(model => model.IsSubscribedToNewsLetter)
-		</th>
-		<th>
-			@Html.DisplayNameFor(model => model.MembershipType)
-		</th>
-		<th>
-			@Html.DisplayNameFor(model => model.MembershipType.DiscountRate)
-		</th>
-		<th>
-			@Html.DisplayNameFor(model => model.Birthday)
-		</th>
-		<th>
-			@Html.DisplayNameFor(model => model.Email)
-		</th>
-		<th>
-			可选操作
-		</th>
-	</tr>
-	</thead>
-	<tbody>
-	@foreach (var item in Model) {
+<form asp-controller="Customers" asp-action="Index" method="get">
+	<div class="m-3 d-flex justify-content-evenly">
+		<div class="form-group w-25">
+			<select class="form-select" asp-for="MembershipType" asp-items="Model.MembershipTypes">
+				<option value="">全部会员类型</option>
+			</select>
+		</div>
+		<div class="form-group w-25">
+			<select class="form-select" asp-for="IsSubscribedToNewsLetter">
+				<option value="0">全部订阅状态</option>
+				<option value="1">未订阅邮件</option>
+				<option value="2">已订阅邮件</option>
+			</select>
+		</div>
+		<button class="btn btn-primary" type="submit">筛选</button>
+		<a class="btn btn-info" asp-action="Index">清除筛选条件</a>
+	</div>
+</form>
+@if (Model.Customers.Count == 0)
+{
+	<div class="card border-info mb-3" style="width: 50%">
+		<div class="card-header">系统提示信息</div>
+		<div class="card-body">
+			<h4 class="card-title">暂无用户信息</h4>
+			<p class="card-text">请检查你的数据库或联系管理员</p>
+		</div>
+	</div>
+}
+else
+{
+	<table class="table text-center table-special-background">
+		<thead>
 		<tr>
-			<td>
-				@Html.DisplayFor(modelItem => item.Name)
-			</td>
-			<td>
-				@if (item.IsSubscribedToNewsLetter.Equals(true))
-				{
-					<text>是</text>
-				}
-				else
-				{
-					<text>否</text>
-				}
-			</td>
-			<td>
-				@Html.DisplayFor(modelItem => item.MembershipType.Name)
-			</td>
-			<td>
-				@if (item.MembershipType.DiscountRate.Equals(0))
-				{
-					<text>不享受折扣</text>
-				}
-				else
-				{
-					@Html.DisplayFor(modelItem => item.MembershipType.DiscountRate)<text>%</text>
-				}
-			</td>
-			<td>
-				@Html.DisplayFor(modelItem => item.Birthday)
-			</td>
-			<td>
-				@Html.DisplayFor(modelItem => item.Email)
-			</td>
-			<td>
-				<a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-info">查看详情</a>
-				<a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-primary">修改</a>
-				@* <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-danger">删除</a> *@
-			</td>
+			<th>
+				@Html.DisplayNameFor(model => model.Customers[0].Name)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.Customers[0].MembershipType)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.Customers[0].IsSubscribedToNewsLetter)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.Customers[0].MembershipType.DiscountRate)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.Customers[0].Birthday)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.Customers[0].Email)
+			</th>
+			<th>
+				可选操作
+			</th>
 		</tr>
-	}
-	</tbody>
-</table>
+		</thead>
+		<tbody>
+		@foreach (var item in Model.Customers)
+		{
+			<tr>
+				<td>
+					@Html.DisplayFor(modelItem => item.Name)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.MembershipType.Name)
+				</td>
+				<td>
+					@if (item.IsSubscribedToNewsLetter.Equals(true))
+					{
+						<text>是</text>
+					}
+					else
+					{
+						<text>否</text>
+					}
+				</td>
+				<td>
+					@if (item.MembershipType.DiscountRate.Equals(0))
+					{
+						<text>不享受折扣</text>
+					}
+					else
+					{
+						@Html.DisplayFor(modelItem => item.MembershipType.DiscountRate)<text>%</text>
+					}
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.Birthday)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.Email)
+				</td>
+				<td>
+					<a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-info">查看详情</a>
+					<a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-primary">修改</a>
+					@* <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-danger">删除</a> *@
+				</td>
+			</tr>
+		}
+		</tbody>
+	</table>
+}

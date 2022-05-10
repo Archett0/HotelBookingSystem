@@ -23,10 +23,34 @@ namespace HotelBookingSystem.Controllers
         }
 
         // Get: Customers
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string membershipType, int isSubscribedToNewsLetter)
         {
-            var hotelBookingSystemContext = _context.Customer.Include(c => c.MembershipType);
-            return View(await hotelBookingSystemContext.ToListAsync());
+            var hotelBookingSystemContext = _context.Customer
+                .Include(c => c.MembershipType);
+
+            IQueryable<string> typeQueryable =
+                from m in hotelBookingSystemContext orderby m.MembershipType.Id select m.MembershipType.Name;
+
+            var customers = from customer in hotelBookingSystemContext select customer;
+
+            if (!String.IsNullOrEmpty(membershipType))
+            {
+                customers = customers.Where(c => c.MembershipType.Name == membershipType);
+            }
+
+            if (!isSubscribedToNewsLetter.Equals(0))
+            {
+                var boolFlag = (isSubscribedToNewsLetter - 1) != 0;
+                customers = customers.Where(c => c.IsSubscribedToNewsLetter.Equals(boolFlag));
+            }
+
+            var viewModel = new CustomerListViewModel
+            {
+                MembershipTypes = new SelectList(await typeQueryable.Distinct().ToListAsync()),
+                Customers = await customers.OrderBy(c => c.Id).ToListAsync()
+            };
+
+            return View(viewModel);
         }
 
         // GET: Customers/Details/5

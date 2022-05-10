@@ -26,15 +26,15 @@ else
 	<table class="table table-bordered table-hover table-special-background">
 		<thead>
 		<tr>
-			<th>
-				@Html.DisplayNameFor(model => model.ResultRooms.ElementAt(0).Name) @*测试完成后删除这一列*@
-			</th>
+			@* <th> *@
+			@* 	@Html.DisplayNameFor(model => model.ResultRooms.ElementAt(0).Name) $1$测试完成后删除这一列#1# *@
+			@* </th> *@
 			<th>
 				@Html.DisplayNameFor(model => model.ResultRooms.ElementAt(0).RoomType)
 			</th>
-			<th>
-				@Html.DisplayNameFor(model => model.ResultRooms.ElementAt(0).Description)
-			</th>
+			@* <th> *@
+			@* 	@Html.DisplayNameFor(model => model.ResultRooms.ElementAt(0).Description) *@
+			@* </th> *@
 			<th>
 				@Html.DisplayNameFor(model => model.ResultRooms.ElementAt(0).Hotel)
 			</th>
@@ -54,15 +54,15 @@ else
 		@foreach (var item in Model.ResultRooms)
 		{
 			<tr>
-				<td>
-					@Html.DisplayFor(modelItem => item.Name)	@*测试完成后删除这一列*@
-				</td>
+				@* <td> *@
+				@* 	@Html.DisplayFor(modelItem => item.Name)	$1$测试完成后删除这一列#1# *@
+				@* </td> *@
 				<td>
 					@Html.DisplayFor(modelItem => item.RoomType.Name)
 				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.Description)
-				</td>
+				@* <td> *@
+				@* 	@Html.DisplayFor(modelItem => item.Description) *@
+				@* </td> *@
 				<td>
 					@Html.DisplayFor(modelItem => item.Hotel.Name)
 				</td>
