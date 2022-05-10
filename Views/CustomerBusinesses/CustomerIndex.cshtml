@@ -45,7 +45,7 @@
 			</div>
 			<div class="form-group w-50">
 				@Html.LabelFor(r => r.RoomType, new { @class = "form-label mt-4"})
-				@Html.DropDownListFor(r => r.RoomType, new SelectList(Model.RoomTypes, "Name", "Name"), "全部房间类别", new { @class = "form-control" }) @*TODO:测试完成后删除"全部房间类别"*@
+				@Html.DropDownListFor(r => r.RoomType, new SelectList(Model.RoomTypes, "Name", "Name"), new { @class = "form-control" })
 			</div>
 			<div class="form-group" style="visibility: hidden">
 				<fieldset disabled="">

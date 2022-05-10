@@ -6,26 +6,25 @@
 	Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <br/>
-<h2>预约列表</h2>
+<h2>预订列表</h2>
 
 <p>
-	<a asp-action="Create" class = "btn btn-primary">新建预约</a>
+	<a asp-action="Create" class = "btn btn-primary">新建预订</a>
 </p>
+<hr/>
 <form asp-controller="Reservations" asp-action="Index" method="get">
-	<div class="form-group mb-3 w-25">
+	<div class="m-3 d-flex justify-content-evenly">
+	<div class="form-group w-25">
 		<select class="form-select" asp-for="RoomType" asp-items="Model.RoomTypes">
 			<option value="">全部房型</option>
 		</select>
 	</div>
-	<div class="form-group mb-3 w-25">
+	<div class="form-group w-25">
 		<select class="form-select" asp-for="RoomHotel" asp-items="Model.RoomHotels">
 			<option value="">全部酒店</option>
 		</select>
 	</div>
-	<div class="form-group mb-3 w-25">
-		@* <select class="form-select" asp-for="ReservationStatus" asp-items="Model.ReservationStatuses"> *@
-		@* 	<option value="10">全部状态</option> *@
-		@* </select> *@
+	<div class="form-group w-25">
 		<select class="form-select" asp-for="ReservationStatus">
 			<option value="0">全部状态</option>
 			<option value="1">未支付</option>
@@ -34,8 +33,8 @@
 			<option value="4">已完成</option>
 		</select>
 	</div>
-	<div class="input-group mb-3 w-25">
-		<button class="btn btn-primary" type="submit">筛选</button>
+	<button class="btn btn-primary" type="submit">筛选</button>
+	<a class="btn btn-info" asp-action="Index">清除筛选条件</a>
 	</div>
 </form>
 @if (Model.Reservations.Count == 0)

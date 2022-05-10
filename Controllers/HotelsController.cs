@@ -139,6 +139,7 @@ namespace HotelBookingSystem.Controllers
         // POST: Hotels/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "SuperAdmin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var hotel = await _context.Hotel.FindAsync(id);

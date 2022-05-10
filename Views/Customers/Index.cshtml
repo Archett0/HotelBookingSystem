@@ -6,7 +6,7 @@
 }
 <br/>
 <h2>顾客列表</h2>
-
+<hr/>
 @* <p> *@
 @* 	<a asp-action="Create" class = "btn btn-primary">新建顾客</a> *@
 @* </p> *@
@@ -74,7 +74,7 @@
 			<td>
 				<a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-info">查看详情</a>
 				<a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-primary">修改</a>
-				<a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-danger">删除</a>
+				@* <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-danger">删除</a> *@
 			</td>
 		</tr>
 	}
