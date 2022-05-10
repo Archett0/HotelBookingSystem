@@ -21,32 +21,41 @@
 			</button>
 			<div class="collapse navbar-collapse d-sm-inline-flex justify-content-between" id="navbarColor02">
 				<ul class="navbar-nav flex-grow-1">
+					<li class="nav-item">
+						<a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">首页</a>
+					</li>
+					@if (@User.IsInRole("Admin"))
+					{
 					@* <li class="nav-item"> *@
 					@* 	<a class="nav-link text-dark" asp-area="" asp-controller="Movies" asp-action="Index">电影</a> *@
 					@* </li> *@
+						<li class="nav-item">
+							<a class="nav-link text-dark" asp-area="" asp-controller="Customers" asp-action="Index">顾客管理</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link text-dark" asp-area="" asp-controller="Hotels" asp-action="Index">酒店管理</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link text-dark" asp-area="" asp-controller="Rooms" asp-action="Index">房间管理</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link text-dark" asp-area="" asp-controller="Reservations" asp-action="Index">预订管理</a>
+							@* @Html.ActionLink("预订","Index","Reservations",new { reservationStatus = 10 }, new {@class = "nav-link text-dark"}) *@
+						</li>
+						<li class="nav-item">
+							<a class="nav-link text-dark" asp-area="" asp-controller="Reservations" asp-action="SchedulerCalendar">预约信息可视化</a>
+						</li>
+					}
 					<li class="nav-item">
-						<a class="nav-link text-dark" asp-area="" asp-controller="Customers" asp-action="Index">顾客</a>
+						<a class="nav-link text-dark" asp-area="" asp-controller="Rooms" asp-action="DirectToCustomerIndex">查询房间</a>
 					</li>
-					<li class="nav-item">
-						<a class="nav-link text-dark" asp-area="" asp-controller="Hotels" asp-action="Index">酒店</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link text-dark" asp-area="" asp-controller="Rooms" asp-action="Index">房间</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link text-dark" asp-area="" asp-controller="Reservations" asp-action="Index">预订</a>
-						@* @Html.ActionLink("预订","Index","Reservations",new { reservationStatus = 10 }, new {@class = "nav-link text-dark"}) *@
-					</li>
-					<li class="nav-item">
-						<a class="nav-link text-dark" asp-area="" asp-controller="Reservations" asp-action="SchedulerCalendar">预约信息可视化</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link text-dark" asp-area="" asp-controller="Rooms" asp-action="DirectToCustomerIndex">顾客首页</a>
-					</li>
-					<li class="nav-item">
-						@* <a class="nav-link text-dark" asp-area="" asp-controller="Reservations" asp-action="CustomerAllReservations">顾客订单页</a> *@
-						@Html.ActionLink("顾客订单页","CustomerAllReservations","Reservations",new { userEmail = UserManager.GetUserName(User) }, new {@class = "nav-link text-dark"})
-					</li>
+					@if (User.IsInRole("User") || User.IsInRole("Admin"))
+					{
+						<li class="nav-item">
+							@* <a class="nav-link text-dark" asp-area="" asp-controller="Reservations" asp-action="CustomerAllReservations">顾客订单页</a> *@
+							@Html.ActionLink("我的订单页", "CustomerAllReservations", "Reservations", new { userEmail = UserManager.GetUserName(User) }, new { @class = "nav-link text-dark" })
+						</li>
+					}
 				</ul>
 				<partial name="_LoginPartial" />
 			</div>
